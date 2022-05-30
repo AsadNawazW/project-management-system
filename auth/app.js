@@ -10,6 +10,9 @@ require('dotenv').config()
 // Load database
 require('./database/init');
 
+// Load ACL
+require('./acl/init');
+
 // Boot application 
 const app = express()
 const host = process.env.SERVER_HOST
@@ -27,6 +30,25 @@ app.use(bodyParser.json())
 
 // Load API Routes
 const router = express.Router()
-const apiRoutes = require('./routes/api')(router, {});
-app.use('/api', apiRoutes)
+const apiAuthRoutes = require('./routes/Auth')(router, {});
+app.use('/api/auth', apiAuthRoutes)
 
+
+const apiUserRoutes = require('./routes/Users')(router, {});
+app.use('/api', apiUserRoutes)
+ 
+
+const apiRoleRoutes = require('./routes/Roles')(router, {});
+app.use('/api', apiRoleRoutes)
+ 
+// const apiPermissionRoutes = require('./routes/Permission')(router, {});
+// app.use('/api/permission', apiPermissionRoutes)
+
+app.get('*', function(req, res){
+    res.status(404).send('not found');
+});
+app.post('*', function(req, res){
+    res.status(404).send('not found');
+});
+
+module.exports = app

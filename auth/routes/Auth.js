@@ -7,8 +7,8 @@ module.exports = (app) => {
 
     app.post('/login',[loginValidator,validateRequest],loginResponse);
     app.post('/register',[registerValidator,validateRequest],registerResponse);
-    app.post('/refresh-token',[refreshTokenValidator,validateRequest],refreshTokenResponse);
+    //app.post('/refresh-token',[refreshTokenValidator,validateRequest],refreshTokenResponse);
  
     return app;     
- };
+};
 

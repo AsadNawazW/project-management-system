@@ -1,65 +1,41 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 let UserService = class {
   constructor() {
-    this.User = require("../models/user");
+    this.User = require("../models/User");
   }
+  async getUser(req,res)
+  {
 
-  async createUser(req, res) {
-    // Our register logic starts here
-    try {
-      // Get user input
-      const { first_name, last_name, email, password } = req.body;
+  }
+  async createUser(req,res)
+  {
+      const { name } = req.body;
 
-      // check if user already exist
-      // Validate if user exist in our database
-      const oldUser = await this.User.findOne({ email });
+      const oldUser = await this.User.findOne({ name });
 
       if (oldUser) {
-        return res.status(409).send("User Already Exist. Please Login");
+        res.status(409).send("User Already Exist.");
+        return
       }
 
-      //Encrypt user password
-      const encryptedPassword = await bcrypt.hash(password, 10);
-
-      // Create user in our database
-      const user = await this.User.create({
-        first_name,
-        last_name,
-        email: email.toLowerCase(), // sanitize: convert email to lowercase
-        password: encryptedPassword,
+      const role = await this.User.create({
+        name : name
+      })
+      res.status(201).json({
+        id : role._id,
+        name: name
       });
-
-      // Create token
-      const token = jwt.sign(
-        { user_id: user._id, email },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
-      // save user token
-      user.token = token;
-        
-      // return new user
-      res.status(201).json(
-        {
-            first_name,
-            last_name,
-            email: email.toLowerCase(), // sanitize: convert email to lowercase
-            token: token
-        }
-      );
-    } catch (err) {
-      console.log(err);
-      return err;
-    }
   }
+  async updateUser(req,res)
+  {
 
-  async attemptLogin(req, res) {}
+  }
+  async deleteUser(req,res)
+  {
 
-  async deleteUser(req, res) {}
+  }
 };
 
 module.exports = UserService;

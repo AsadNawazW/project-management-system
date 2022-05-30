@@ -9,7 +9,7 @@ const validateRequest = function (req, res, next) {
         return res.status(400).send(err);
     }   
 
-    next()
+    return next()
 }
 
 module.exports =  {
