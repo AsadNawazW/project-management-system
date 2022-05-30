@@ -1,5 +1,6 @@
 //Load global imports
 const express = require('express')
+const bodyParser = require('body-parser')
 const http = require('http');
 
 
@@ -20,7 +21,12 @@ server.on('listening', function() {
     console.log(`Example app listening on port http:\/\/${server.address().address}:${port}`)
 })
 
+
+// Load json parser
+app.use(bodyParser.json())
+
 // Load API Routes
 const router = express.Router()
 const apiRoutes = require('./routes/api')(router, {});
 app.use('/api', apiRoutes)
+

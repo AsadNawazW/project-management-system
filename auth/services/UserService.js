@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+
 let UserService = class {
   constructor() {
     this.User = require("../models/user");
@@ -18,7 +21,7 @@ let UserService = class {
       }
 
       //Encrypt user password
-      encryptedPassword = await bcrypt.hash(password, 10);
+      const encryptedPassword = await bcrypt.hash(password, 10);
 
       // Create user in our database
       const user = await this.User.create({
@@ -38,11 +41,19 @@ let UserService = class {
       );
       // save user token
       user.token = token;
-
+        
       // return new user
-      res.status(201).json(user);
+      res.status(201).json(
+        {
+            first_name,
+            last_name,
+            email: email.toLowerCase(), // sanitize: convert email to lowercase
+            token: token
+        }
+      );
     } catch (err) {
       console.log(err);
+      return err;
     }
   }
 
