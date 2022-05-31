@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 
 //const mongoDbConnectUrl = `mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/${process.env.MONGODB_DATABASE}`
 const mongoDbConnectUrl = `mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/`
+
 console.log(mongoDbConnectUrl)
 
 
