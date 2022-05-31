@@ -4,6 +4,9 @@ const UserService = require("../services/UserService");
 
 let UserServiceObj = new UserService;
 
+const listUsersResponse = async (req, res) => {
+    await UserServiceObj.listUsers(req,res)
+}
 const getUserResponse = async (req, res) => {
     await UserServiceObj.getUser(req,res)
 }
@@ -18,6 +21,7 @@ const deleteUserResponse = async (req, res) => {
 }
 
 module.exports =  {
+    listUsersResponse,
     getUserResponse,
     createUserResponse,
     updateUserResponse,

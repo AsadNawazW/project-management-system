@@ -1,16 +1,33 @@
+const { validateRequest } = require("../middlewares/Validation");
+const {
+  getUserResponse,
+  listUsersResponse,
+  createUserResponse,
+  updateUserResponse,
+  deleteUserResponse,
+} = require("../controllers/Users");
+const {
+  getUserValidate,
+  listUsersValidate,
+  createUserValidate,
+  updateUserValidate,
+  deleteUserValidate,
+} = require("../validations/Users"); 
 
-const { validateRequest } = require('../middlewares/Validation');
-const {    getUserResponse,    createUserResponse,    updateUserResponse,    deleteUserResponse } = require('../controllers/Users');
-const {    getUserValidate,    createUserValidate,    updateUserValidate,    deleteUserValidate } = require('../validations/Users');
+module.exports = (app) => {
+  app.get("/users", [listUsersValidate, validateRequest], listUsersResponse);
+  app.get("/users/:userId", [getUserValidate, validateRequest], getUserResponse);
+  app.post("/users", [createUserValidate, validateRequest], createUserResponse);
+  app.patch(
+    "/users",
+    [updateUserValidate, validateRequest],
+    updateUserResponse
+  );
+  app.delete(
+    "/users",
+    [deleteUserValidate, validateRequest],
+    deleteUserResponse
+  );
 
-
-module.exports = (app) => 
-{    
-    app.get('/users/:id',[getUserValidate,validateRequest],getUserResponse);
-    app.post('/users',[createUserValidate,validateRequest],createUserResponse);    
-    app.patch('/users/:id',[updateUserValidate,validateRequest],updateUserResponse);    
-    app.delete('/users/:id',[deleteUserValidate,validateRequest],deleteUserResponse);    
-   
-    return app;     
+  return app;
 };
-

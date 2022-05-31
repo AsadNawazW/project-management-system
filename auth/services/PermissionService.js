@@ -5,10 +5,11 @@ let PermissionService = class {
   constructor() {
     this.Permission = require("../models/Permission");
   }
-  async getPermission(req,res)
+  async listPermissions(req,res)
   {
-
+    
   }
+
   async createPermission(req,res)
   {
       const { name } = req.body;

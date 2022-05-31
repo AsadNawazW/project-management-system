@@ -6,11 +6,43 @@ let RoleService = class {
     this.Role = require("../models/Role");
     this.Permission = require("../models/Permission");
     this.RolePermission = require("../models/RolePermission");
+    this.paginateOptions = {
+      page: 1,
+      limit: 10,
+      select : [
+        'name'
+      ]
+    }
   }
-  async getRole(req,res)
+
+  async getRolePermissions(roleModel)
   {
 
   }
+
+  async getRole(req,res)
+  {
+    
+    const oldRole = await this.Role.findById(req.params.userId)
+
+    if (!oldRole) {
+      res.status(404).send("Role doesn't exist!");
+      return
+    }
+
+    res.status(200).json({        
+      name: oldRole.name,      
+    });
+
+  }
+
+  async listRoles(req,res)
+  {
+    let users = await this.Role.paginate({},this.paginateOptions)
+    res.status(200).send(users)    
+  }
+
+
   async createRole(req,res)
   {
       const { name } = req.body;

@@ -1,6 +1,7 @@
 const { validateRequest } = require("../middlewares/Validation");
 const {
-  getRoleResponse,
+  listRolesResponse,
+  getRoleResponse,  
   createRoleResponse,
   updateRoleResponse,
   deleteRoleResponse,
@@ -8,6 +9,7 @@ const {
   deleteRolePermissionResponse,
 } = require("../controllers/Roles");
 const {
+  listRolesValidate,
   getRoleValidate,
   createRoleValidate,
   updateRoleValidate,
@@ -17,8 +19,9 @@ const {
 } = require("../validations/Roles");
 
 module.exports = (app) => {
-    
-  app.get("/roles", [getRoleValidate, validateRequest], getRoleResponse);
+
+  app.get("/roles", [listRolesValidate, validateRequest], listRolesResponse);
+  app.get("/roles/:roleId", [getRoleValidate, validateRequest], getRoleResponse);
   app.post("/roles", [createRoleValidate, validateRequest], createRoleResponse);
   app.patch(
     "/roles",

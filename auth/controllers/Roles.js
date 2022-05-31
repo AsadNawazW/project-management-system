@@ -4,6 +4,9 @@ const RoleService = require("../services/RoleService");
 
 let RoleServiceObj = new RoleService;
 
+const listRolesResponse = async (req, res) => {
+    await RoleServiceObj.listRoles(req,res)
+}
 const getRoleResponse = async (req, res) => {
     await RoleServiceObj.getRole(req,res)
 }
@@ -25,6 +28,7 @@ const deleteRolePermissionResponse = async (req, res) => {
 
 
 module.exports =  {
+    listRolesResponse,
     getRoleResponse,
     createRoleResponse,
     updateRoleResponse,

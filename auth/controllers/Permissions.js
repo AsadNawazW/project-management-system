@@ -4,6 +4,10 @@ const PermissionService = require("../services/PermissionService");
 
 let PermissionServiceObj = new PermissionService;
 
+
+const listPermissionsResponse = async (req, res) => {
+    await PermissionServiceObj.listPermissions(req,res)
+}
 const getPermissionResponse = async (req, res) => {
     await PermissionServiceObj.getPermission(req,res)
 }
@@ -18,6 +22,7 @@ const deletePermissionResponse = async (req, res) => {
 }
 
 module.exports =  {
+    listPermissionsResponse,
     getPermissionResponse,
     createPermissionResponse,
     updatePermissionResponse,

@@ -23,6 +23,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.6.0",
     "mongoose": "^6.3.4",
+    "mongoose-paginate-v2": "^1.6.3",
     "rest": "^2.0.0"
   },
   "devDependencies": {

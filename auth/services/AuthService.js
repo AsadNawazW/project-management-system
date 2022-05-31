@@ -107,8 +107,7 @@ let AuthService = class {
     }
     return
   }
-
-  async deleteUser(req, res) {}
+  
 };
 
 module.exports = AuthService;

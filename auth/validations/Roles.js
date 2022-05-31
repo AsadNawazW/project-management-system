@@ -1,6 +1,10 @@
 // Load Validation imports
 const { check,param } = require('express-validator');
 
+const listRolesValidate = [
+
+]
+
 const getRoleValidate = [
     check('name','Role Name is required').exists().bail().isLength({min:2,max:32}).bail(),
 ]
@@ -27,6 +31,7 @@ const deleteRolePermissionValidate = [
 
 
 module.exports =  {
+    listRolesValidate,
     getRoleValidate,
     createRoleValidate,
     updateRoleValidate,
