@@ -1,14 +1,17 @@
 
 const { validateRequest } = require('../middlewares/Validation');
-const { registerResponse, loginResponse , refreshTokenResponse } = require('../controllers/Auth');
-const { registerValidator, loginValidator , refreshTokenValidator  } = require('../validations/Auth')
+const {    getPermissionResponse,    createPermissionResponse,    updatePermissionResponse,    deletePermissionResponse } = require('../controllers/Permissions');
+const {    getPermissionValidate,    createPermissionValidate,    updatePermissionValidate,    deletePermissionValidate } = require('../validations/Permissions');
 
-module.exports = (app) => {    
 
-    app.post('/login',[loginValidator,validateRequest],loginResponse);
-    //app.post('/register',[registerValidator,validateRequest],registerResponse);
-    app.post('/refresh-token',[refreshTokenValidator,validateRequest],refreshTokenResponse);
- 
+module.exports = (app) => 
+{   
+     
+    app.get('/permissions',[getPermissionValidate,validateRequest],getPermissionResponse);
+    app.post('/permissions',[createPermissionValidate,validateRequest],createPermissionResponse);    
+    app.patch('/permissions',[updatePermissionValidate,validateRequest],updatePermissionResponse);    
+    app.delete('/permissions',[deletePermissionValidate,validateRequest],deletePermissionResponse);    
+    
     return app;     
 };
 

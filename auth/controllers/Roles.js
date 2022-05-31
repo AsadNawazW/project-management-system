@@ -16,11 +16,20 @@ const updateRoleResponse = async (req, res) => {
 const deleteRoleResponse = async (req, res) => {
     await RoleServiceObj.deleteRole(req,res)
 }
+const createRolePermissionResponse = async (req, res) => {
+    await RoleServiceObj.createRolePermission(req,res)
+}
+const deleteRolePermissionResponse = async (req, res) => {
+    await RoleServiceObj.deleteRolePermission(req,res)
+}
+
 
 module.exports =  {
     getRoleResponse,
     createRoleResponse,
     updateRoleResponse,
-    deleteRoleResponse
+    deleteRoleResponse,
+    createRolePermissionResponse,
+    deleteRolePermissionResponse
 };
 

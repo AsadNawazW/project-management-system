@@ -40,6 +40,10 @@ app.use('/api', apiUserRoutes)
 
 const apiRoleRoutes = require('./routes/Roles')(router, {});
 app.use('/api', apiRoleRoutes)
+
+
+const apiPermissionRoutes = require('./routes/Permissions')(router, {});
+app.use('/api', apiPermissionRoutes)
  
 // const apiPermissionRoutes = require('./routes/Permission')(router, {});
 // app.use('/api/permission', apiPermissionRoutes)
