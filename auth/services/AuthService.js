@@ -6,6 +6,8 @@ const ac = require('../acl/init');
 let AuthService = class {
   constructor() {
     this.User = require("../models/User");
+    this.UserService = require("./UserService");
+    this.UserService = new this.UserService;
     
   }
 
@@ -71,7 +73,7 @@ let AuthService = class {
 
        // Validate if user exist in our database
       const user = await this.User.findOne({ email });
-      add
+
       if (user && (await bcrypt.compare(password, user.password))) 
       {
         // Create token
@@ -92,9 +94,9 @@ let AuthService = class {
 
         // user
         res.status(200).json({
-          email: user.email,
-          scopes: user.scopes,
-          roles: user.roles,          
+          email: user.email,          
+          role: await this.UserService.getUserRole(user),
+          permissions: await this.UserService.getUserPermissions(user),
           token: token,          
         });
       }

@@ -24,7 +24,7 @@ let RoleService = class {
       role : roleModel
     })
 
-    console.log(roleModel)
+    
     if (!rolePermissions) {      
       return rolePermissionsArr
     }
