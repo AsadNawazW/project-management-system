@@ -1,11 +1,12 @@
 const { validateRequest } = require("../middlewares/Validation");
 const {
-  getPermissionResponse,
+  listPermissionsResponse,
   createPermissionResponse,
   updatePermissionResponse,
   deletePermissionResponse,
 } = require("../controllers/Permissions");
 const {
+  listPermissionsValidate,
   getPermissionValidate,
   createPermissionValidate,
   updatePermissionValidate,
@@ -15,9 +16,10 @@ const {
 module.exports = (app) => {
   app.get(
     "/permissions",
-    [getPermissionValidate, validateRequest],
-    getPermissionResponse
+    [listPermissionsValidate, validateRequest],
+    listPermissionsResponse
   );
+  
   app.post(
     "/permissions",
     [createPermissionValidate, validateRequest],

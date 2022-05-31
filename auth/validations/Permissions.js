@@ -1,6 +1,10 @@
 // Load Validation imports
 const { check } = require('express-validator');
 
+const listPermissionsValidate = [
+
+]
+
 const getPermissionValidate = [
     check('name','Permission Name is required').exists().bail().isLength({min:2,max:32}).bail(),
 ]
@@ -17,6 +21,7 @@ const deletePermissionValidate = [
 
 
 module.exports =  {
+    listPermissionsValidate,
     getPermissionValidate,
     createPermissionValidate,
     updatePermissionValidate,

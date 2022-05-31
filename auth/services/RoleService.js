@@ -38,8 +38,8 @@ let RoleService = class {
 
   async listRoles(req,res)
   {
-    let users = await this.Role.paginate({},this.paginateOptions)
-    res.status(200).send(users)    
+    let roles = await this.Role.paginate({},this.paginateOptions)
+    res.status(200).send(roles)    
   }
 
 

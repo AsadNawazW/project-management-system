@@ -3,11 +3,41 @@ const jwt = require("jsonwebtoken");
 
 let PermissionService = class {
   constructor() {
-    this.Permission = require("../models/Permission");
+    this.Permission = require("../models/Permission");    
+    this.paginateOptions = {
+      page: 1,
+      limit: 10,
+      select : [
+        'name'
+      ]
+    }
   }
-  async listPermissions(req,res)
+
+  async getRolesWithThisPermission(roleModel)
+  {
+
+  }
+
+  async getPermission(req,res)
   {
     
+    const oldPermission = await this.Permission.findById(req.params.userId)
+
+    if (!oldPermission) {
+      res.status(404).send("Permission doesn't exist!");
+      return
+    }
+
+    res.status(200).json({        
+      name: oldPermission.name,      
+    });
+
+  }
+
+  async listPermissions(req,res)
+  {
+    let permissions = await this.Permission.paginate({},this.paginateOptions)
+    res.status(200).send(permissions)    
   }
 
   async createPermission(req,res)
