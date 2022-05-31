@@ -4,6 +4,9 @@ const jwt = require("jsonwebtoken");
 let UserService = class {
   constructor() {
     this.User = require("../models/User");
+    this.Role = require("../models/Role");
+    this.RoleService = require("./RoleService");
+    this.RoleService = new this.RoleService;
     this.paginateOptions = {
       page: 1,
       limit: 10,
@@ -14,12 +17,40 @@ let UserService = class {
       ]
     }
   }
+  async getDefaultUserRole()
+  {
+    let role = await this.Role.findOne({ name : 'user' })
 
+    if (!role) {      
+      return null;
+    }
+   
+    return role;
+  }
   async getUserRole(userModel)
   {
-    
-  }
+    let role = await this.Role.findById(userModel.role)
 
+    if (!role) {      
+      return await this.getDefaultUserRole();
+    }
+
+    return role;
+  }
+  async getUserPermissions(userModel)
+  {
+    let permissions = [];
+    let role = await this.getUserRole(userModel)
+
+    if (!role) {      
+      return [];
+    }
+
+    permissions = await this.RoleService.getRolePermissions(role._id)
+    
+    return permissions;
+  }
+  
   async getUser(req,res)
   {
     
@@ -29,11 +60,13 @@ let UserService = class {
       res.status(404).send("User doesn't exist!");
       return
     }
-
+    
     res.status(200).json({        
       first_name: oldUser.first_name,
       last_name: oldUser.last_name,
       email: oldUser.email,
+      role: await this.getUserRole(oldUser),
+      permissions: await this.getUserPermissions(oldUser),
     });
 
   }
@@ -55,7 +88,9 @@ let UserService = class {
         return
       }
 
-      const user = await this.User.create({ first_name, last_name, email, password })
+      const role = await this.getDefaultUserRole();
+
+      const user = await this.User.create({ first_name, last_name, email, password , role })
 
       res.status(201).json({ first_name, last_name, email, password });
 

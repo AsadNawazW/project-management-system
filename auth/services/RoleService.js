@@ -17,13 +17,32 @@ let RoleService = class {
 
   async getRolePermissions(roleModel)
   {
+    let rolePermissionsArr = [];
+    let permissionArr = [];
 
+    let rolePermissions = await this.RolePermission.find({
+      role : roleModel
+    })
+
+    console.log(roleModel)
+    if (!rolePermissions) {      
+      return rolePermissionsArr
+    }
+    
+    for(const rolePermission of rolePermissions)
+    {      
+      permissionArr.push(rolePermission.permission)
+    }
+
+    rolePermissionsArr = await this.Permission.find({ _id: { $in : permissionArr}}).select('name')
+
+    return rolePermissionsArr
   }
 
   async getRole(req,res)
   {
     
-    const oldRole = await this.Role.findById(req.params.userId)
+    const oldRole = await this.Role.findById(req.params.roleId)
 
     if (!oldRole) {
       res.status(404).send("Role doesn't exist!");
@@ -31,7 +50,8 @@ let RoleService = class {
     }
 
     res.status(200).json({        
-      name: oldRole.name,      
+      name: oldRole.name,
+      permissions : await this.getRolePermissions(oldRole)      
     });
 
   }

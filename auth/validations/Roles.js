@@ -6,7 +6,7 @@ const listRolesValidate = [
 ]
 
 const getRoleValidate = [
-    check('name','Role Name is required').exists().bail().isLength({min:2,max:32}).bail(),
+    param('roleId','Role ID is required').exists().bail().isLength({min:2,max:32}).bail(),
 ]
 const createRoleValidate = [
     check('name','Role Name is required').exists().bail().isLength({min:2,max:32}).bail(),

@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: { type: String },
     token: { type: String },
-    roles: { type:Array,default: []},    
+    role: { type: mongoose.Types.ObjectId, ref: 'Role' },    
 });
 
 userSchema.plugin(mongoosePaginate);
