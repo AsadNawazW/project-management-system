@@ -20,10 +20,11 @@ services:
     environment:
       MONGODB_HOST: "${MONGODB_HOST-mongo}"
       MONGODB_PORT: ${MONGODB_PORT-27017}
-      MONGODB_DATABASE: "${MONGODB_DATABASE-auth}"
+      MONGODB_DATABASE: "${MONGODB_DATABASE}"
       MONGODB_USERNAME: "${MONGODB_USERNAME-root}"
       MONGODB_PASSWORD: "${MONGODB_PASSWORD-example}"
       SERVER_HOST: "web-auth-service"
       SERVER_PORT: "${SERVER_PORT-10000}"
+      TOKEN_KEY: "${TOKEN_KEY-someVeryRandomAndSecureValue!@?}"
 
 

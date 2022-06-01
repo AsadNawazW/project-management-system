@@ -2,57 +2,69 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const http = require('http');
+const AuthRoutes = require('./routes/Auth')
+const RolesRoutes = require('./routes/Roles')
+const PermissionsRoutes = require('./routes/Permissions')
+const UsersRoutes = require('./routes/Users')
 
 
-// Load ENV files
-require('dotenv').config()
-
-// Load database
-require('./database/init');
-
-// Load ACL
-require('./acl/init');
-
-// Boot application 
-const app = express()
-const host = process.env.SERVER_HOST
-const port = process.env.SERVER_PORT
-var server = http.createServer(app);
-server.listen(port, host);
-
-server.on('listening', function() {
-    console.log(`Example app listening on port http:\/\/${server.address().address}:${port}`)
-})
+function boot(app)
+{
+    // Boot application 
+    // const app = express()
+    const host = process.env.SERVER_HOST
+    const port = process.env.SERVER_PORT
+    // var server = http.createServer(app);
+    // server.listen(port, host);
+    let server = app.listen(port,host);
 
 
-// Load json parser
-app.use(bodyParser.json())
-
-// Load API Routes
-const router = express.Router()
-const apiAuthRoutes = require('./routes/Auth')(router, {});
-app.use('/api/auth', apiAuthRoutes)
+    server.on('listening', function() {
+        console.log(`Example app listening on port http:\/\/${server.address().address}:${port}`)
+    })
 
 
-const apiUserRoutes = require('./routes/Users')(router, {});
-app.use('/api', apiUserRoutes)
- 
+    // Load json parser
+    app.use(bodyParser.json())
 
-const apiRoleRoutes = require('./routes/Roles')(router, {});
-app.use('/api', apiRoleRoutes)
+    return app    
+}
+
+function registerRoutes()
+{
+    
+    const app = express();
+
+    app.get('*', (req, res) => res.status(200).json({ message: 'Project started' }));
+    // Load API Routes
+    const router = express.Router()
+    const apiAuthRoutes = AuthRoutes(router, {});
+    app.use('/api/auth', apiAuthRoutes)
 
 
-const apiPermissionRoutes = require('./routes/Permissions')(router, {});
-app.use('/api', apiPermissionRoutes)
- 
-// const apiPermissionRoutes = require('./routes/Permission')(router, {});
-// app.use('/api/permission', apiPermissionRoutes)
+    const apiUserRoutes = UsersRoutes(router, {});
+    app.use('/api', apiUserRoutes)
+    
 
-app.get('*', function(req, res){
-    res.status(404).send('not found');
-});
-app.post('*', function(req, res){
-    res.status(404).send('not found');
-});
+    const apiRoleRoutes = RolesRoutes(router, {});
+    app.use('/api', apiRoleRoutes)
 
-module.exports = app
+
+    const apiPermissionRoutes = PermissionsRoutes(router, {});
+    app.use('/api', apiPermissionRoutes)
+    
+    // const apiPermissionRoutes = PermissionsRoutes(router, {});
+    // app.use('/api/permission', apiPermissionRoutes)
+
+    app.get('*', function(req, res){
+        res.status(404).send('not found');
+    });
+    app.post('*', function(req, res){
+        res.status(404).send('not found');
+    });
+
+    return app
+}
+
+
+module.exports =  { boot , registerRoutes }

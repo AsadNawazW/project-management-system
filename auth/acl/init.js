@@ -3,30 +3,31 @@ const Role = require("../models/Role")
 const Permission = require("../models/Permission");
 const RolePermission = require("../models/RolePermission");
 
-let defaultRoles = [
-    'user',
-    'admin'
-];
+async function initAcl(){
 
-let defaultPermissions = [
-    'profile'
-];
-
-let defaultRolePermissions = [
+    let defaultRoles = [
+        'user',
+        'admin'
+    ];
     
-    'user:profile',    
-    'admin:profile',
-    'admin:role.create',
-    'admin:role.update',
-    'admin:role.delete',
-    'admin:permission.create',
-    'admin:permission.update',
-    'admin:permission.delete',
+    let defaultPermissions = [
+        'profile'
+    ];
     
-]
+    let defaultRolePermissions = [
+        
+        'user:profile',    
+        'admin:profile',
+        'admin:role.create',
+        'admin:role.update',
+        'admin:role.delete',
+        'admin:permission.create',
+        'admin:permission.update',
+        'admin:permission.delete',
+        
+    ]
 
-async function init(){
-
+    
     let defaultPermission;
     let defaultRole;
     let defaultRolePermission;
@@ -96,7 +97,9 @@ async function init(){
     };
 }
 
-init()
+
+module.exports = { initAcl }
+
 
  
    
