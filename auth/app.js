@@ -24,8 +24,6 @@ function boot(app)
     })
 
 
-    // Load json parser
-    app.use(bodyParser.json())
 
     return app    
 }
@@ -35,7 +33,10 @@ function registerRoutes()
     
     const app = express();
 
-    app.get('*', (req, res) => res.status(200).json({ message: 'Project started' }));
+
+    // Load json parser
+    app.use(bodyParser.json())
+    
     // Load API Routes
     const router = express.Router()
     const apiAuthRoutes = AuthRoutes(router, {});

@@ -1,38 +1,61 @@
-jest.useFakeTimers()
+// jest.useFakeTimers();
+// jest.setTimeout(30000);
 
-let supertest = require('supertest')
-require('dotenv').config({path: '.env.test', debug: true  })
-const http = require('http');
-let { initDb,closeConnection } = require('../database/init');
-let { initAcl } = require('../acl/init');
-let { boot,registerRoutes } = require("../app");
+let supertest = require("supertest");
+require("dotenv").config({ path: ".env.test", debug: true });
+const http = require("http");
+let { initDb, closeConnection } = require("../database/init");
+let { initAcl } = require("../acl/init");
+let { boot, registerRoutes } = require("../app");
 
-let baseUrl;
-baseUrl = 'http://' + process.env.SERVER_HOST + ':' + process.env.SERVER_PORT 
+// let baseUrl;
+// baseUrl = 'http://' + process.env.SERVER_HOST + ':' + process.env.SERVER_PORT
 
-beforeAll(() => {    
-    initDb()    
-});
+describe("Login ", () => {
+  let server;
+  let request;
+  beforeAll(() => {
+    initDb();
+  });
 
-afterAll(() => {
-    closeConnection()    
-});
+  afterAll(() => {
+    closeConnection();
+  });
 
-beforeAll((done) => {
+  beforeAll(done => {
     server = http.createServer(registerRoutes());
     server.listen(done);
     request = supertest(server);
   });
 
-  afterAll((done) => {
-    server.close(done);
+  afterAll(done => {
+    server.close(done);    
   });
 
-describe('Login ',() => {
-    //const route =  request(baseUrl).post('/api/auth/login')       
+  it("login route is 400 without username and password", async () => {
+    const response = await request.post("/api/auth/login");
+    expect(response.statusCode).toBe(400);
+  });
 
-    test('login route is not 500', async () => {        
-        
-        
+  it("login route with correct username and password works", async () => {
+    
+    const response = await request.post("/api/auth/login").send({
+      email: "noaman.h@allshorevirtualstaffing.com",
+      password: "noaman123",
     });
-})
+
+    expect(response.statusCode).toBe(400);
+
+  });
+
+  it("login route with correct username and password works", async () => {
+    
+    const response = await request.post("/api/auth/login").send({
+      email: "noaman.h@allshorevirtualstaffing.com",
+      password: "noaman123",
+    });
+
+    expect(response.statusCode).toBe(400);
+
+  });
+});
