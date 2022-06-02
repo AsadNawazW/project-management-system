@@ -1,10 +1,10 @@
-name: Node.js CI
+name: Auth Microservices CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main,master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main,master ]
 
 jobs:
   build:
