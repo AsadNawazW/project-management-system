@@ -32,6 +32,10 @@ class AuthService extends BaseService {
 
       //Encrypt user password
       const encryptedPassword = await bcrypt.hash(password, 10);
+
+
+      // Get Default Role
+      const role = await this.UserService.getDefaultUserRole();
       
       // Create user in our database
       const user = await this.User.create({
@@ -39,9 +43,9 @@ class AuthService extends BaseService {
         last_name,
         email: email.toLowerCase(), // sanitize: convert email to lowercase
         password: encryptedPassword,
+        role: role
       });
 
-      
       
 
       // Create token
@@ -60,7 +64,8 @@ class AuthService extends BaseService {
         first_name,
         last_name,
         email: email.toLowerCase(),
-        roles: user.roles,        
+        role: user.role,
+        permissions: await this.UserService.getUserPermissions(user),        
         token: token,
       });
     } catch (err) {

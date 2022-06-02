@@ -45,5 +45,14 @@ function closeConnection()
     mongoose.connection.close();    
 }
 
+async function dropDatabase()
+{
+    await mongoose.connection.db.dropDatabase();
+}
 
-module.exports = { initDb , closeConnection }
+async function dropCollection(collectionName)
+{
+    await mongoose.connection.db.dropDatabase(collectionName);
+}
+
+module.exports = { initDb , closeConnection , dropDatabase , dropCollection}

@@ -92,7 +92,11 @@ let UserService = class {
 
       const user = await this.User.create({ first_name, last_name, email, password , role })
 
-      res.status(201).json({ first_name, last_name, email, password });
+      res.status(201).json({
+        email: user.email,          
+        role: await this.getUserRole(user),
+        permissions: await this.getUserPermissions(user),        
+      });
 
   }
   async updateUser(req,res)
