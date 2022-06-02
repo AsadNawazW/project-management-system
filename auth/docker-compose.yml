@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:      
+      MONGO_INITDB_ROOT_USERNAME: "${MONGODB_USERNAME-root}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_PASSWORD-example}"
+    volumes:
+    - /data/db:/data/db
+  web-auth-service:
+    container_name: node-web-auth-service
+    image: noaman/node-web-auth-service
+    restart: always
+    build: .
+    ports:
+      - 11000:10000
+    links:
+      - mongo
+    environment:
+      MONGODB_HOST: "${MONGODB_HOST-mongo}"
+      MONGODB_PORT: ${MONGODB_PORT-27017}
+      MONGODB_DATABASE: "${MONGODB_DATABASE}"
+      MONGODB_USERNAME: "${MONGODB_USERNAME-root}"
+      MONGODB_PASSWORD: "${MONGODB_PASSWORD-example}"
+      SERVER_HOST: "web-auth-service"
+      SERVER_PORT: "${SERVER_PORT-10000}"
+      TOKEN_KEY: "${TOKEN_KEY-someVeryRandomAndSecureValue!@?}"
+
+
