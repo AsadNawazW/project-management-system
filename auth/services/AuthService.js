@@ -1,14 +1,18 @@
+// Global Imports
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+// Local Imports
 const ac = require('../acl/init');
+const BaseService = require('./BaseService');
+const User = require("../models/User");
+const UserService =  require("./UserService");
 
-
-let AuthService = class {
+class AuthService extends BaseService {
   constructor() {
-    this.User = require("../models/User");
-    this.UserService = require("./UserService");
-    this.UserService = new this.UserService;
-    
+    super()
+    this.User = User
+    this.UserService = new UserService()    
   }
 
   async createUser(req, res) {    
@@ -37,6 +41,7 @@ let AuthService = class {
         password: encryptedPassword,
       });
 
+      
       
 
       // Create token
@@ -101,7 +106,7 @@ let AuthService = class {
         });
       }
       else{
-        res.status(400).send("Invalid Credentials");
+        res.status(401).send("Invalid Credentials");
       }      
     } catch (err) { 
       console.log(err);
