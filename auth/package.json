@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "watch": "nodemon server.js",
-    "test": "jest --detectOpenHandles  --silent",
+    "test": "jest",
     "test:watch": "npm run test --watch"
   },
   "author": "",
@@ -32,9 +32,12 @@
     "@types/express": "^4.17.13",
     "@types/jest": "^27.5.1",
     "@types/node": "^17.0.36",
+    "axios-test-instance": "^5.0.0",
     "faker": "^6.6.6",
+    "http-shutdown": "^1.2.2",
     "jest": "^28.1.0",
     "nodemon": "^2.0.16",
-    "supertest": "^6.2.3"
+    "supertest": "^6.2.3",
+    "weak-napi": "^2.0.2"
   }
 }

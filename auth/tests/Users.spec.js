@@ -47,12 +47,13 @@ describe("Users ", () => {
 
   beforeAll(done => {
     server = http.createServer(registerRoutes());
+    server = require('http-shutdown')(server);
     server.listen(done);
     request = supertest(server);
   });
 
-  afterAll(done => {
-    server.close(done);
+  afterAll(() => {
+    server.shutdown()
   });
 
   test("login route is 400 without username and password", async () => {
