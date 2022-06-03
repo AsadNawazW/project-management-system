@@ -19,6 +19,12 @@ jobs:
         node-version: [14.x ,16.x, 18.x]
 
     steps:
+    
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.7.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }
+          
       - name: Use Node.js ${{ matrix.node-version }}        
         uses: actions/checkout@v3
         
@@ -28,6 +34,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'      
           cache-dependency-path: ./auth/package-lock.json
+          
+}
           
       - name: Install NPM Packages        
         working-directory: ./auth
