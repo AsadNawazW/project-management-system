@@ -5,4 +5,4 @@ RUN npm ci --only=production --omit=dev
 COPY . .
 
 EXPOSE 11000
-CMD [ "node", "server.js" ]
+CMD [ "npm", "start" ]

@@ -1,7 +1,7 @@
 // Import Models
-const Role = require("../models/Role")
-const Permission = require("../models/Permission");
-const RolePermission = require("../models/RolePermission");
+import Role from "../models/Role";
+import Permission from "../models/Permission";
+import RolePermission from "../models/RolePermission";
 
 async function initAcl(){
 

@@ -1,6 +1,6 @@
 
 // Load Service Imports
-const UserService = require("../services/UserService");
+import UserService from "../services/UserService";
 
 let UserServiceObj = new UserService;
 

@@ -1,5 +1,5 @@
 // Load Validation imports
-const { check,param } = require('express-validator');
+import { check, param } from "express-validator";
 
 const listRolesValidate = [
 

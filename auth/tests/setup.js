@@ -1,5 +1,5 @@
 // Load database
-require('./database/init');
+import "./database/init";
 
 // Load ACL
-require('./acl/init');
+import "./acl/init";

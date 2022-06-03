@@ -1,22 +1,6 @@
-const { validateRequest } = require("../middlewares/Validation");
-const {
-  listRolesResponse,
-  getRoleResponse,  
-  createRoleResponse,
-  updateRoleResponse,
-  deleteRoleResponse,
-  createRolePermissionResponse,
-  deleteRolePermissionResponse,
-} = require("../controllers/Roles");
-const {
-  listRolesValidate,
-  getRoleValidate,
-  createRoleValidate,
-  updateRoleValidate,
-  deleteRoleValidate,
-  createRolePermissionValidate,
-  deleteRolePermissionValidate,
-} = require("../validations/Roles");
+import { validateRequest } from "../middlewares/Validation";
+import { listRolesResponse, getRoleResponse, createRoleResponse, updateRoleResponse, deleteRoleResponse, createRolePermissionResponse, deleteRolePermissionResponse } from "../controllers/Roles";
+import { listRolesValidate, getRoleValidate, createRoleValidate, updateRoleValidate, deleteRoleValidate, createRolePermissionValidate, deleteRolePermissionValidate } from "../validations/Roles";
 
 module.exports = (app) => {
 

@@ -1,6 +1,6 @@
 
 // Load Service Imports
-const RoleService = require("../services/RoleService");
+import RoleService from "../services/RoleService";
 
 let RoleServiceObj = new RoleService;
 

@@ -1,14 +1,6 @@
-const { validateRequest } = require("../middlewares/Validation");
-const {
-  registerResponse,
-  loginResponse,
-  refreshTokenResponse,
-} = require("../controllers/Auth");
-const {
-  registerValidator,
-  loginValidator,
-  refreshTokenValidator,
-} = require("../validations/Auth");
+import { validateRequest } from "../middlewares/Validation";
+import { registerResponse, loginResponse, refreshTokenResponse } from "../controllers/Auth";
+import { registerValidator, loginValidator, refreshTokenValidator } from "../validations/Auth";
 
 module.exports = (app) => {
   app.post("/login", [loginValidator, validateRequest], loginResponse);

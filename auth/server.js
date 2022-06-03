@@ -1,14 +1,15 @@
 // Load ENV files
-require('dotenv').config()
+import { config } from "dotenv";
+config();
 
 // Load database
-let { initDb,closeConnection } = require('./database/init');
+import { initDb,closeConnection } from './database/init.js'
 initDb()
 
 // Load ACL
-let { initAcl } = require('./acl/init');
+import { initAcl } from "./acl/init";
 initAcl()
 
 // Load App
-let { boot,registerRoutes } = require('./app');
+import { boot, registerRoutes } from "./app";
 boot(registerRoutes())

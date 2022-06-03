@@ -1,17 +1,6 @@
-const { validateRequest } = require("../middlewares/Validation");
-const {
-  listPermissionsResponse,
-  createPermissionResponse,
-  updatePermissionResponse,
-  deletePermissionResponse,
-} = require("../controllers/Permissions");
-const {
-  listPermissionsValidate,
-  getPermissionValidate,
-  createPermissionValidate,
-  updatePermissionValidate,
-  deletePermissionValidate,
-} = require("../validations/Permissions");
+import { validateRequest } from "../middlewares/Validation";
+import { listPermissionsResponse, createPermissionResponse, updatePermissionResponse, deletePermissionResponse } from "../controllers/Permissions";
+import { listPermissionsValidate, getPermissionValidate, createPermissionValidate, updatePermissionValidate, deletePermissionValidate } from "../validations/Permissions";
 
 module.exports = (app) => {
   app.get(

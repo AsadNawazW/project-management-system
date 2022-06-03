@@ -1,5 +1,5 @@
 // Load Validation imports
-const { check } = require('express-validator');
+import { check } from "express-validator";
 
 
 const registerValidator = [        

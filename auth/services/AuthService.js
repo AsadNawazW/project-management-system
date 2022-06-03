@@ -1,12 +1,12 @@
 // Global Imports
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 // Local Imports
-const ac = require('../acl/init');
-const BaseService = require('./BaseService');
-const User = require("../models/User");
-const UserService =  require("./UserService");
+import ac from "../acl/init";
+import BaseService from "./BaseService";
+import User from "../models/User";
+import UserService from "./UserService";
 
 class AuthService extends BaseService {
   constructor() {

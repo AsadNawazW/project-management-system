@@ -1,6 +1,6 @@
 
 // Load Service Imports
-const AuthService = require("../services/AuthService");
+import AuthService from "../services/AuthService";
 
 let AuthServiceObj = new AuthService;
 

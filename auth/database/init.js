@@ -1,8 +1,9 @@
-const mongoose = require('mongoose')
+import mongoose from "mongoose";
 
-function initDb()
+export async function  initDb()
 {
 
+    console.log("DB Init!")
     let mongoDbConnectUrl = 'mongodb://'
 
     if(process.env.MONGODB_USERNAME && process.env.MONGODB_PASSWORD)
@@ -18,7 +19,7 @@ function initDb()
     }
 
 
-    console.log(mongoDbConnectUrl)
+    
 
 
     mongoose.connection.on('error',function (err) {  
@@ -29,30 +30,26 @@ function initDb()
         console.log('Mongoose default connection open to ' + mongoDbConnectUrl);
     });
 
-    mongoose.connect(mongoDbConnectUrl,() => {
-        //console.log("Connected with mongodb")
-    })
-   
-
-    mongoose.connection.once('open', function () {
-      console.log("Connected to database");      
-    });    
+    let connect = await mongoose.connect(mongoDbConnectUrl)   
+    console.log(mongoDbConnectUrl)
+       
 
 }
 
-function closeConnection()
+export async function closeConnection()
 {
-    mongoose.connection.close();    
+    console.log("DB Closed!")
+    let disconnect =  await mongoose.connection.close();    
+    //let disconnect = mongoose.disconnect();    
 }
 
-async function dropDatabase()
+export async function dropDatabase()
 {
     await mongoose.connection.db.dropDatabase();
 }
 
-async function dropCollection(collectionName)
+export async function dropCollection(collectionName)
 {
     await mongoose.connection.db.dropDatabase(collectionName);
 }
 
-module.exports = { initDb , closeConnection , dropDatabase , dropCollection}

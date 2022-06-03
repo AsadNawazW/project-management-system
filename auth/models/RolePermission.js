@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const mongoosePaginate = require('mongoose-paginate-v2');
+import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const rolePermissionSchema = new mongoose.Schema({
     role: { type: mongoose.Types.ObjectId, ref: 'Role' },

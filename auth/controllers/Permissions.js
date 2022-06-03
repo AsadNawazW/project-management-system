@@ -1,6 +1,6 @@
 
 // Load Service Imports
-const PermissionService = require("../services/PermissionService");
+import PermissionService from "../services/PermissionService";
 
 let PermissionServiceObj = new PermissionService;
 

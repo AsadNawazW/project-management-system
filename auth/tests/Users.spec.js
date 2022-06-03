@@ -1,15 +1,10 @@
-let supertest = require("supertest");
-const { faker } = require("@faker-js/faker");
+import supertest from "supertest";
+import { faker } from "@faker-js/faker";
 require("dotenv").config({ path: ".env.test", debug: true });
-const http = require("http");
-let {
-  initDb,
-  closeConnection,
-  dropDatabase,
-  dropCollection,
-} = require("../database/init");
-let { initAcl } = require("../acl/init");
-let { boot, registerRoutes } = require("../app");
+import http from "http";
+import { initDb, closeConnection, dropDatabase, dropCollection } from "../database/init";
+import { initAcl } from "../acl/init";
+import { boot, registerRoutes } from "../app";
 
 const mockResponse = () => {
   const res = {};
@@ -24,13 +19,14 @@ const mockRequest = (bodyData) => {
   };
 };
 
-const UserService = require("../services/UserService");
+import UserService from "../services/UserService";
 let UserServiceObj = new UserService();
 
-const AuthService = require("../services/AuthService");
+import AuthService from "../services/AuthService";
 let AuthServiceObj = new AuthService();
 
 describe("Users ", () => {
+
   let server;
   let request;
 
@@ -55,9 +51,11 @@ describe("Users ", () => {
     server.close(done);
   });
 
+
+
   test("login route is 400 without username and password", async () => {
     // Arrange
-
+    console.log("Test Started 1!")
     // Act
     const response = await request.post("/api/auth/login");
 
@@ -65,7 +63,9 @@ describe("Users ", () => {
     expect(response.statusCode).toBe(400);
   });
 
+
   test("login route with correct username and password works", async () => {
+    console.log("Test Started 2!")
     // Arrange
     let req = {
       first_name: faker.name.firstName(),
@@ -93,6 +93,9 @@ describe("Users ", () => {
     expect(response.body.hasOwnProperty("role")).toBeTruthy();
     expect(response.body.hasOwnProperty("permissions")).toBeTruthy();
   });
+
+  return 
+
 
   test("login route with incorrect username and password gives 401", async () => {
     // Arrange

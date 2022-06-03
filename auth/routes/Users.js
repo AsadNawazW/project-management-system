@@ -1,18 +1,6 @@
-const { validateRequest } = require("../middlewares/Validation");
-const {
-  getUserResponse,
-  listUsersResponse,
-  createUserResponse,
-  updateUserResponse,
-  deleteUserResponse,
-} = require("../controllers/Users");
-const {
-  getUserValidate,
-  listUsersValidate,
-  createUserValidate,
-  updateUserValidate,
-  deleteUserValidate,
-} = require("../validations/Users"); 
+import { validateRequest } from "../middlewares/Validation";
+import { getUserResponse, listUsersResponse, createUserResponse, updateUserResponse, deleteUserResponse } from "../controllers/Users";
+import { getUserValidate, listUsersValidate, createUserValidate, updateUserValidate, deleteUserValidate } from "../validations/Users";
 
 module.exports = (app) => {
   app.get("/users", [listUsersValidate, validateRequest], listUsersResponse);
