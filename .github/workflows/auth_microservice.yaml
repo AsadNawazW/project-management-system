@@ -1,26 +1,47 @@
-name: Node.js CI
+name: Auth Microservices CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main,master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main,master ]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    
+    defaults:
+      run:
+        working-directory: 'auth'
     strategy:
       matrix:
         node-version: [14.x ,16.x, 18.x]
 
     steps:
-      - uses: actions/checkout@v3
+    
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.7.0
+          
+      - name: Use Node.js ${{ matrix.node-version }}        
+        uses: actions/checkout@v3
+        
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
+          cache: 'npm'      
+          cache-dependency-path: ./auth/package-lock.json          
+          
+      - name: Install NPM Packages        
+        working-directory: ./auth
+        run: npm ci         
+        
+      - name: Building Production Build
+        working-directory: ./auth
+        run: npm run build --if-present
+        
+      - name: Running Tests
+        working-directory: ./auth
+        run: npm test
+    
