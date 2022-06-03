@@ -33,9 +33,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'      
-          cache-dependency-path: ./auth/package-lock.json
-          
-}
+          cache-dependency-path: ./auth/package-lock.json          
           
       - name: Install NPM Packages        
         working-directory: ./auth
