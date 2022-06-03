@@ -43,19 +43,20 @@ describe("Users ", () => {
 
   beforeAll(done => {
     server = http.createServer(registerRoutes());
+    server = require('http-shutdown')(server);
     server.listen(done);
     request = supertest(server);
   });
 
-  afterAll(done => {
-    server.close(done);
+  afterAll(() => {
+    server.shutdown()
   });
 
 
 
   test("login route is 400 without username and password", async () => {
     // Arrange
-    console.log("Test Started 1!")
+
     // Act
     const response = await request.post("/api/auth/login");
 
@@ -65,7 +66,7 @@ describe("Users ", () => {
 
 
   test("login route with correct username and password works", async () => {
-    console.log("Test Started 2!")
+    
     // Arrange
     let req = {
       first_name: faker.name.firstName(),
@@ -93,8 +94,6 @@ describe("Users ", () => {
     expect(response.body.hasOwnProperty("role")).toBeTruthy();
     expect(response.body.hasOwnProperty("permissions")).toBeTruthy();
   });
-
-  return 
 
 
   test("login route with incorrect username and password gives 401", async () => {
