@@ -1,12 +1,12 @@
 // Load Validation imports
-import { check } from "express-validator";
+import { check, param } from "express-validator";
 
 const listPermissionsValidate = [
 
 ]
 
 const getPermissionValidate = [
-    check('name','Permission Name is required').exists().bail().isLength({min:2,max:32}).bail(),
+    param('permissionId','Permission Name is required').exists().bail().isLength({min:2,max:32}).bail(),
 ]
 const createPermissionValidate = [
     check('name','Permission Name is required').exists().bail().isLength({min:2,max:32}).bail(),

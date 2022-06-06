@@ -1,8 +1,9 @@
 import { validateRequest } from "../middlewares/Validation";
-import { listPermissionsResponse, createPermissionResponse, updatePermissionResponse, deletePermissionResponse } from "../controllers/Permissions";
+import { listPermissionsResponse, getPermissionResponse, createPermissionResponse, updatePermissionResponse, deletePermissionResponse } from "../controllers/Permissions";
 import { listPermissionsValidate, getPermissionValidate, createPermissionValidate, updatePermissionValidate, deletePermissionValidate } from "../validations/Permissions";
 
 module.exports = (app) => {
+  app.get("/permissions/:permissionId", [getPermissionValidate, validateRequest], getPermissionResponse);
   app.get(
     "/permissions",
     [listPermissionsValidate, validateRequest],
