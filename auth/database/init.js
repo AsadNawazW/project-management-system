@@ -13,24 +13,27 @@ export async function  initDb()
 
     mongoDbConnectUrl = mongoDbConnectUrl + process.env.MONGODB_HOST + ':' + process.env.MONGODB_PORT
 
-    if(process.env.MONGODB_DATABASE  === undefined || process.env.MONGODB_DATABASE === null)
+    if(process.env.MONGODB_DATABASE  !== undefined || process.env.MONGODB_DATABASE === null)
     {
         mongoDbConnectUrl = mongoDbConnectUrl + '/' + process.env.MONGODB_DATABASE
     }
 
 
-    
+    //mongoDbConnectUrl = mongoDbConnectUrl + '?w=majority'
 
 
     mongoose.connection.on('error',function (err) {  
-        //console.log('Mongoose default connection error: ' + err);
+        console.log('Mongoose default connection error: ' + err);
     }); 
 
     mongoose.connection.on('connected', function () {  
         console.log('Mongoose default connection open to ' + mongoDbConnectUrl);
     });
 
-    let connect = await mongoose.connect(mongoDbConnectUrl)   
+    let connect = await mongoose.connect(mongoDbConnectUrl,{
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })   
     console.log(mongoDbConnectUrl)
        
 
@@ -53,3 +56,11 @@ export async function dropCollection(collectionName)
     await mongoose.connection.db.dropDatabase(collectionName);
 }
 
+export const clearDatabase = async () => {
+    const collections = mongoose.connection.collections;
+
+    for (const key in collections) {
+        const collection = collections[key];
+        await collection.deleteMany({});
+    }
+}

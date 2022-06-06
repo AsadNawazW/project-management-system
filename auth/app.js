@@ -1,11 +1,12 @@
 //Load global imports
-const express = require('express')
-const bodyParser = require('body-parser')
-const http = require('http');
-const AuthRoutes = require('./routes/Auth')
-const RolesRoutes = require('./routes/Roles')
-const PermissionsRoutes = require('./routes/Permissions')
-const UsersRoutes = require('./routes/Users')
+import express from "express";
+import bodyParser from "body-parser";
+import http from "http";
+import AuthRoutes from "./routes/Auth";
+import RolesRoutes from "./routes/Roles";
+import PermissionsRoutes from "./routes/Permissions";
+import UsersRoutes from "./routes/Users";
+import helmet from "helmet";
 
 
 function boot(app)
@@ -23,7 +24,22 @@ function boot(app)
         console.log(`Example app listening on port http:\/\/${server.address().address}:${port}`)
     })
 
-
+    // Load Security Headers
+    app.use(helmet.contentSecurityPolicy());
+    app.use(helmet.crossOriginEmbedderPolicy());
+    app.use(helmet.crossOriginOpenerPolicy());
+    app.use(helmet.crossOriginResourcePolicy());
+    app.use(helmet.dnsPrefetchControl());
+    app.use(helmet.expectCt());
+    app.use(helmet.frameguard());
+    app.use(helmet.hidePoweredBy());
+    app.use(helmet.hsts());
+    app.use(helmet.ieNoOpen());
+    app.use(helmet.noSniff());
+    app.use(helmet.originAgentCluster());
+    app.use(helmet.permittedCrossDomainPolicies());
+    app.use(helmet.referrerPolicy());
+    app.use(helmet.xssFilter());
 
     return app    
 }
@@ -36,6 +52,8 @@ function registerRoutes()
 
     // Load json parser
     app.use(bodyParser.json())
+
+   
     
     // Load API Routes
     const router = express.Router()

@@ -21,7 +21,7 @@ let PermissionService = class {
   async getPermission(req,res)
   {
     
-    const oldPermission = await this.Permission.findById(req.params.userId)
+    const oldPermission = await this.Permission.findById(req.params.permissionId)
 
     if (!oldPermission) {
       res.status(404).send("Permission doesn't exist!");

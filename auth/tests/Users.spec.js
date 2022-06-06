@@ -2,9 +2,15 @@ import supertest from "supertest";
 import { faker } from "@faker-js/faker";
 require("dotenv").config({ path: ".env.test", debug: true });
 import http from "http";
-import { initDb, closeConnection, dropDatabase, dropCollection } from "../database/init";
+import { initDb, closeConnection, dropDatabase, dropCollection,clearDatabase } from "../database/init";
 import { initAcl } from "../acl/init";
 import { boot, registerRoutes } from "../app";
+
+
+process.on('unhandledRejection', (reason) => {
+  console.log(reason); // log the reason including the stack trace
+  throw e;
+});
 
 const mockResponse = () => {
   const res = {};
@@ -31,14 +37,14 @@ describe("Users ", () => {
   let request;
 
   beforeAll(async () => {
-    initDb();
+    process.env.MONGODB_DATABASE += '_users'  
+    await initDb();
     await initAcl();
   });
 
-  afterAll(async () => {
-    await dropDatabase();
-    // await dropCollection('users');
-    closeConnection();
+  afterAll(async () => {    
+    await clearDatabase();
+    await closeConnection();
   });
 
   beforeAll(done => {

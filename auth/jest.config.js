@@ -59,10 +59,10 @@ module.exports = {
   // forceCoverageMatch: [],
 
   // A path to a module which exports an async function that is triggered once before all test suites
-  // globalSetup: undefined,
+  //globalSetup: './tests/setup.js',
 
   // A path to a module which exports an async function that is triggered once after all test suites
-  // globalTeardown: undefined,
+  //globalTeardown: './tests/teardown.js',
 
   // A set of global variables that need to be available in all test environments
   // globals: {},
@@ -192,10 +192,12 @@ module.exports = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-  setupFiles: [
-      'dotenv/config'
-  ],
+  // setupFiles: [
+  //     'dotenv/config',
+  //     //'./tests/setup.js'
+  // ],
 
+  
 
   testEnvironment: 'node'
 };
