@@ -13,7 +13,7 @@ export async function  initDb()
 
     mongoDbConnectUrl = mongoDbConnectUrl + process.env.MONGODB_HOST + ':' + process.env.MONGODB_PORT
 
-    if(process.env.MONGODB_DATABASE  === undefined || process.env.MONGODB_DATABASE === null)
+    if(process.env.MONGODB_DATABASE  !== undefined || process.env.MONGODB_DATABASE === null)
     {
         mongoDbConnectUrl = mongoDbConnectUrl + '/' + process.env.MONGODB_DATABASE
     }
