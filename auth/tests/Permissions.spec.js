@@ -104,16 +104,16 @@ describe("Permissions ", () => {
 
     const permissionModel = await PermissionServiceObj.Permission.create(permissionObj);
 
-    permissionObj.new_name = faker.name.firstName();    
+    permissionObj.name = faker.name.firstName();    
 
     // Act
-    const response = await request.patch("/api/permissions").send(permissionObj);
+    const response = await request.patch("/api/permissions/" + permissionModel._id).send(permissionObj);
 
     // Assert    ;
     
     expect(response.statusCode).toBe(200);
     expect(response.header["content-type"]).toMatch(/json/);
-    expect(response.body.name).toEqual(permissionObj.new_name);
+    expect(response.body.name).toEqual(permissionObj.name);
   });
 
   test("Deletes a permission", async () => {
@@ -125,7 +125,7 @@ describe("Permissions ", () => {
     let permissionModel = await PermissionServiceObj.Permission.create(permissionObj);
     
     // Act
-    const response = await request.delete("/api/permissions").send(permissionObj);
+    const response = await request.delete("/api/permissions/" + permissionModel._id).send();
 
     // Assert
     expect(response.statusCode).toBe(204);

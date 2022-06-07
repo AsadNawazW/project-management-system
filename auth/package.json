@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node server.js",
-    "watch": "babel-watch server.js",
+    "watch": "nodemon --exec babel-node local.js",
     "test": "jest",
     "test:silent": "jest --silent"
   },
@@ -29,7 +29,9 @@
     "mongodb": "^4.6.0",
     "mongoose": "^6.3.4",
     "mongoose-paginate-v2": "^1.6.3",
-    "rest": "^2.0.0"
+    "mongoose-to-swagger": "^1.4.0",
+    "rest": "^2.0.0",
+    "swagger-ui-express": "^4.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",

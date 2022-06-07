@@ -8,12 +8,12 @@ module.exports = (app) => {
   app.get("/roles/:roleId", [getRoleValidate, validateRequest], getRoleResponse);
   app.post("/roles", [createRoleValidate, validateRequest], createRoleResponse);
   app.patch(
-    "/roles",
+    "/roles/:roleId",
     [updateRoleValidate, validateRequest],
     updateRoleResponse
   );
   app.delete(
-    "/roles",
+    "/roles/:roleId",
     [deleteRoleValidate, validateRequest],
     deleteRoleResponse
   );

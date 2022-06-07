@@ -16,12 +16,12 @@ module.exports = (app) => {
     createPermissionResponse
   );
   app.patch(
-    "/permissions",
+    "/permissions/:permissionId",
     [updatePermissionValidate, validateRequest],
     updatePermissionResponse
   );
   app.delete(
-    "/permissions",
+    "/permissions/:permissionId",
     [deletePermissionValidate, validateRequest],
     deletePermissionResponse
   );

@@ -12,11 +12,11 @@ const createPermissionValidate = [
     check('name','Permission Name is required').exists().bail().isLength({min:2,max:32}).bail(),
 ]
 const updatePermissionValidate = [
-    check('name','Permission Name is required').exists().bail().isLength({min:2,max:32}).bail(),
-    check('new_name','New Permission Name is required').exists().bail().isLength({min:2,max:32}).bail(),
+    param('permissionId','Permission Name is required').exists().bail().isLength({min:2,max:32}).bail(),
+    check('name','Permission Name is required').exists().bail().isLength({min:2,max:32}).bail(),    
 ]
 const deletePermissionValidate = [
-    check('name','Permission Name is required').exists().bail().isLength({min:2,max:32}).bail(),
+    param('permissionId','Permission Name is required').exists().bail().isLength({min:2,max:32}).bail(),
 ]
 
 

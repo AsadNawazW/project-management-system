@@ -7,6 +7,8 @@ import RolesRoutes from "./routes/Roles";
 import PermissionsRoutes from "./routes/Permissions";
 import UsersRoutes from "./routes/Users";
 import helmet from "helmet";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./swagger.json";
 
 
 function boot(app)
@@ -41,6 +43,7 @@ function boot(app)
     app.use(helmet.referrerPolicy());
     app.use(helmet.xssFilter());
 
+
     return app    
 }
 
@@ -71,6 +74,8 @@ function registerRoutes()
 
     const apiPermissionRoutes = PermissionsRoutes(router, {});
     app.use('/api', apiPermissionRoutes)
+
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     
     // const apiPermissionRoutes = PermissionsRoutes(router, {});
     // app.use('/api/permission', apiPermissionRoutes)
@@ -81,6 +86,9 @@ function registerRoutes()
     app.post('*', function(req, res){
         res.status(404).send('not found');
     });
+
+
+    
 
     return app
 }

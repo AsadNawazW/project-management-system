@@ -7,12 +7,12 @@ module.exports = (app) => {
   app.get("/users/:userId", [getUserValidate, validateRequest], getUserResponse);
   app.post("/users", [createUserValidate, validateRequest], createUserResponse);
   app.patch(
-    "/users",
+    "/users/:userId",
     [updateUserValidate, validateRequest],
     updateUserResponse
   );
   app.delete(
-    "/users",
+    "/users/:userId",
     [deleteUserValidate, validateRequest],
     deleteUserResponse
   );

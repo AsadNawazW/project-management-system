@@ -103,7 +103,7 @@ let UserService = class {
   {
       const {  email } = req.body;
 
-      const oldUser = await this.User.findOne({ email : email });
+      const oldUser = await this.User.findById(req.params.userId);
 
       if (!oldUser) {
         res.status(404).send("User doesn't exist.");
@@ -138,7 +138,7 @@ let UserService = class {
   {
     const { email } = req.body;
 
-    const oldUser = await this.User.findOne({ email : email });
+    const oldUser = await this.User.findById(req.params.userId);
 
     if (!oldUser) {
       res.status(404).send("User doesn't exist.");
