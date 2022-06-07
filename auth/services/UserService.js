@@ -131,11 +131,11 @@ let UserService = class {
       oldUser.save()
 
       res.status(200).json({        
-        first_name,
-        last_name,
+        first_name: oldUser.first_name,
+        last_name: oldUser.last_name,
         email: oldUser.email,          
-        role: await this.getUserRole(user),
-        permissions: await this.getUserPermissions(user),  
+        role: await this.getUserRole(oldUser),
+        permissions: await this.getUserPermissions(oldUser),  
       });
   }
   async deleteUser(req,res)
