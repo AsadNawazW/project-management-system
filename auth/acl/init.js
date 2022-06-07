@@ -17,14 +17,23 @@ async function initAcl(){
     let defaultRolePermissions = [
         
         'user:profile',    
-        'admin:profile',
-        'admin:role.create',
-        'admin:role.update',
-        'admin:role.delete',
-        'admin:permission.create',
-        'admin:permission.update',
-        'admin:permission.delete',
-        
+        'admin:profile',        
+        'admin:users.index',
+        'admin:users.get',
+        'admin:users.create',
+        'admin:users.update',
+        'admin:users.delete',
+        'admin:users.role',
+        'admin:roles.index',
+        'admin:roles.get',
+        'admin:roles.create',
+        'admin:roles.update',
+        'admin:roles.delete',
+        'admin:permissions.index',
+        'admin:permissions.get',
+        'admin:permissions.create',
+        'admin:permissions.update',
+        'admin:permissions.delete',        
     ]
 
     

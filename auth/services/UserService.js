@@ -93,6 +93,8 @@ let UserService = class {
       const user = await this.User.create({ first_name, last_name, email, password , role })
 
       res.status(201).json({
+        first_name,
+        last_name,
         email: user.email,          
         role: await this.getUserRole(user),
         permissions: await this.getUserPermissions(user),        
@@ -129,15 +131,15 @@ let UserService = class {
       oldUser.save()
 
       res.status(200).json({        
-        first_name: oldUser.first_name,
-        last_name: oldUser.last_name,
-        email: oldUser.email,
+        first_name,
+        last_name,
+        email: oldUser.email,          
+        role: await this.getUserRole(user),
+        permissions: await this.getUserPermissions(user),  
       });
   }
   async deleteUser(req,res)
   {
-    const { email } = req.body;
-
     const oldUser = await this.User.findById(req.params.userId);
 
     if (!oldUser) {
@@ -150,6 +152,40 @@ let UserService = class {
       status : "success"
     });
     
+  }
+  async addUserRole(req,res)
+  {
+      
+    
+    let oldUser = await this.User.findById(req.params.userId);
+    
+    if (!oldUser) {
+      res.status(404).send("User doesn't exist.");
+      return
+    }
+
+    const { role:roleName   } = req.body;  
+    
+    
+    const role = await this.Role.findOne({ name : roleName })
+
+    if (!role) {
+      res.status(404).send("Role doesn't exist.");
+      return
+    }
+
+    oldUser.role = role
+    
+    oldUser.save();
+
+    res.status(200).json({        
+      first_name: oldUser.first_name,
+      last_name: oldUser.last_name,
+      email: oldUser.email,          
+      role: await this.getUserRole(oldUser),
+      permissions: await this.getUserPermissions(oldUser), 
+    });
+
   }
 }; 
 

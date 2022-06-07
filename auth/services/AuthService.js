@@ -7,12 +7,43 @@ import ac from "../acl/init";
 import BaseService from "./BaseService";
 import User from "../models/User";
 import UserService from "./UserService";
+import RoleService from "./RoleService";
 
 class AuthService extends BaseService {
   constructor() {
     super()
     this.User = User
-    this.UserService = new UserService()    
+    this.UserService = new UserService()        
+    this.RoleService = new RoleService()
+  }
+
+  async getUserRole(userModel)
+  {
+    let role = await this.RoleService.Role.findById(userModel._id)
+
+    if (!role) {      
+      return await this.UserService.getDefaultUserRole();
+    }
+
+    return role;
+  }
+
+  async getUserPermissions(userModel)
+  {
+    let permissions = [];
+    let role = await this.getUserRole(userModel)
+
+    if (!role) {      
+      return [];
+    }
+
+    permissions = await this.RoleService.getRolePermissions(role._id)
+    
+    permissions = permissions.map(function(item){
+      return item.name      
+    })
+    
+    return permissions;
   }
 
   async createUser(req, res) {    
@@ -36,7 +67,8 @@ class AuthService extends BaseService {
 
       // Get Default Role
       const role = await this.UserService.getDefaultUserRole();
-      
+
+
       // Create user in our database
       const user = await this.User.create({
         first_name,
@@ -46,11 +78,22 @@ class AuthService extends BaseService {
         role: role
       });
 
+
+      // GetPermissions
+      const permissions = await this.getUserPermissions(user)
+
       
 
       // Create token
       const token = jwt.sign(
-        { user_id: user._id, email },
+        {
+          user_id: user._id,
+          first_name,
+          last_name,
+          email,        
+          role : role.name,
+          permissions  
+        },
         process.env.TOKEN_KEY,
         {
           expiresIn: "1h",
@@ -64,8 +107,8 @@ class AuthService extends BaseService {
         first_name,
         last_name,
         email: email.toLowerCase(),
-        role: user.role,
-        permissions: await this.UserService.getUserPermissions(user),        
+        role: role.name,
+        permissions,       
         token: token,
       });
     } catch (err) {
@@ -83,6 +126,10 @@ class AuthService extends BaseService {
 
        // Validate if user exist in our database
       const user = await this.User.findOne({ email });
+      const role=  await this.getUserRole(user)
+      const permissions = await this.getUserPermissions(user)
+      
+      const { first_name, last_name} = user;
 
       if (user && (await bcrypt.compare(password, user.password))) 
       {
@@ -90,12 +137,15 @@ class AuthService extends BaseService {
         const token = jwt.sign(
           {
             user_id: user._id,
-            email: user.email,
-            scopes: user.scopes,
+            first_name,
+            last_name,
+            email,        
+            role : role.name,
+            permissions  
           },
-          process.env.TOKEN_KEY, 
+          process.env.TOKEN_KEY,
           {
-            expiresIn: "2h",
+            expiresIn: "1h",
           }
         );
 
@@ -105,8 +155,8 @@ class AuthService extends BaseService {
         // user
         res.status(200).json({
           email: user.email,          
-          role: await this.UserService.getUserRole(user),
-          permissions: await this.UserService.getUserPermissions(user),
+          role,
+          permissions,
           token: token,          
         });
       }

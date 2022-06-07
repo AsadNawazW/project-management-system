@@ -19,12 +19,17 @@ const updateUserResponse = async (req, res) => {
 const deleteUserResponse = async (req, res) => {
     await UserServiceObj.deleteUser(req,res)
 }
+const addUserRoleResponse = async (req, res) => {
+    await UserServiceObj.addUserRole(req,res)
+}
+
 
 module.exports =  {
     listUsersResponse,
     getUserResponse,
     createUserResponse,
     updateUserResponse,
-    deleteUserResponse
+    deleteUserResponse,
+    addUserRoleResponse
 };
 

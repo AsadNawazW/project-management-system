@@ -24,6 +24,10 @@ const updateUserValidate = [
 const deleteUserValidate = [
     param('userId','User ID is required').exists().bail()
 ]
+const addUserRoleValidate = [
+    param('userId','User ID is required').exists().bail(),
+    check('role','Role name is required!').exists().bail().isLength({min:2,max:32}).bail(),
+]
 
 
 module.exports =  {
@@ -31,5 +35,6 @@ module.exports =  {
     getUserValidate,
     createUserValidate,
     updateUserValidate,
-    deleteUserValidate
+    deleteUserValidate,
+    addUserRoleValidate
 }; 
