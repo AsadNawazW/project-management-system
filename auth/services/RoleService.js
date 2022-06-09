@@ -14,7 +14,17 @@ let RoleService = class {
       ]
     }
   }
+  async getRolePermissionsArray(roleModel)
+  {
+    let rolePermissionsArr = await this.getRolePermissions(roleModel);
 
+    rolePermissionsArr = rolePermissionsArr.map(function(item){
+      return item.name      
+    })
+
+    return rolePermissionsArr;
+
+  }
   async getRolePermissions(roleModel)
   {
     let rolePermissionsArr = [];
@@ -51,7 +61,7 @@ let RoleService = class {
 
     res.status(200).json({        
       name: oldRole.name,
-      permissions : await this.getRolePermissions(oldRole)      
+      permissions : await this.getRolePermissionsArray(oldRole)      
     });
 
   }
@@ -79,33 +89,33 @@ let RoleService = class {
       })
 
       res.status(201).json({        
-        name: name
+        name: name,
+        permissions : await this.getRolePermissionsArray(oldRole)
       });
 
   }
   async updateRole(req,res)
   {
-      const { name,new_name } = req.body;
+      const { name } = req.body;
 
-      const oldRole = await this.Role.findOne({ name : name });
+      const oldRole = await this.Role.findById(req.params.roleId)
 
       if (!oldRole) {
         res.status(404).send("Role doesn't exist.");
         return
       }
       
-      oldRole.name = new_name
+      oldRole.name = name
       oldRole.save()
 
-      res.status(200).json({        
-        name: new_name
+      res.status(200).json({
+        name: oldRole.name,
+        permissions : await this.getRolePermissionsArray(oldRole)
       });
   }
   async deleteRole(req,res)
-  {
-    const { name,new_name } = req.body;
-
-    const oldRole = await this.Role.findOne({ name : name });
+  {    
+    const oldRole = await this.Role.findById(req.params.roleId)
 
     if (!oldRole) {
       res.status(404).send("Role doesn't exist.");
@@ -113,9 +123,7 @@ let RoleService = class {
     }
 
     oldRole.delete()
-    res.status(204).json({        
-      status : "success"
-    });
+    res.status(204).send()
     
   }
   async createRolePermission(req,res)
@@ -126,7 +134,7 @@ let RoleService = class {
     const name  = req.params.name;    
     const { permissions } = req.body;
     
-    const role = await this.Role.findOne({ name : name });
+    const role = await this.Role.findById(req.params.roleId)
 
     if (!role) {
       res.status(404).send("Role doesn't exist.");
@@ -160,8 +168,9 @@ let RoleService = class {
       }
     }
 
-    res.status(201).json({        
-      permissions : permissions
+    res.status(201).json({     
+      name: role.name,
+      permissions : await this.getRolePermissionsArray(role)
     });
 
 
@@ -171,11 +180,10 @@ let RoleService = class {
   {
     let permission;
     let rolePermission;
-
-    const name  = req.params.name;    
+       
     const { permissions } = req.body;
     
-    const role = await this.Role.findOne({ name : name });
+    const role = await this.Role.findById(req.params.roleId)
 
     if (!role) {
       res.status(404).send("Role doesn't exist.");
@@ -205,9 +213,7 @@ let RoleService = class {
       }
     }
 
-    res.status(204).json({        
-      status : "success"
-    });
+    res.status(204).send()
   }
   
 }; 

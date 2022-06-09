@@ -62,27 +62,26 @@ let PermissionService = class {
   }
   async updatePermission(req,res)
   {
-      const { name,new_name } = req.body;
+      const { name } = req.body;
 
-      const oldPermission = await this.Permission.findOne({ name : name });
+      const oldPermission = await this.Permission.findById(req.params.permissionId)
 
       if (!oldPermission) {
         res.status(404).send("Permission doesn't exist.");
         return
       }
       
-      oldPermission.name = new_name
+      oldPermission.name = name
       oldPermission.save()
 
       res.status(200).json({        
-        name: new_name
+        name: name
       });
   }
   async deletePermission(req,res)
-  {
-    const { name,new_name } = req.body;
+  {    
 
-    const oldPermission = await this.Permission.findOne({ name : name });
+    const oldPermission = await this.Permission.findById(req.params.permissionId)
 
     if (!oldPermission) {
       res.status(404).send("Permission doesn't exist.");

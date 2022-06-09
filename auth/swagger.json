@@ -1,0 +1,917 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Auth Micro Service",
+    "description": "Provides documentation to consume API of Auth Micro Service",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "127.0.0.1:12000/api/",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "API for authentication of normal users"
+    },
+    {
+      "name": "Users",
+      "description": "API for CRUD of  users in the system"
+    },
+    {
+      "name": "Roles",
+      "description": "API for CRUD of  Roles in the system"
+    },
+    {
+      "name": "Permissions",
+      "description": "API for CRUD of  Permissions in the system"
+    }
+  ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "name": "Authorization",
+      "in": "header",
+      "scheme": "bearer",
+      "type": "apiKey",
+      "bearerFormat": "JWT",
+      "description": "JWT Authorization header"
+    }
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Allow users to login",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/LoginResponse"
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Allows users to register",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RegisterResponse"
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users in system",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UsersCollection"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Creates a user in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Updates a user in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User ID of the user to update",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "simple"
+          },
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Deletes a user in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User ID of the user to update",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/users/{userId}/roles": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Attaches a role to a user",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User ID of the user to update",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "simple"
+          },
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRolesRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          }
+        }
+      }      
+    },
+    "/roles": {
+      "get": {
+        "tags": ["Roles"],
+        "summary": "Get all roles in system",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RolesCollection"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Roles"],
+        "summary": "Creates a role in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RoleRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RoleResponse"
+            }
+          }
+        }
+      }
+    },
+    "/roles/{roleId}": {
+      "patch": {
+        "tags": ["Roles"],
+        "summary": "Updates a role in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "path",
+            "description": "Role ID of the user to delete",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "simple"
+          },
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RoleRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RoleResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Roles"],
+        "summary": "Deletes a role in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "path",
+            "description": "Role ID of the user to delete",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/roles/{roleId}/permissions": {
+      "post": {
+        "tags": ["Roles"],
+        "summary": "Attaches permission(s) to a role",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "path",
+            "description": "Role ID of the role to update",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "simple"
+          },
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RolePermissionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RoleResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Roles"],
+        "summary": "Detaches permission(s) of a role",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "path",
+            "description": "Role ID of the role to update",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "simple"
+          },
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RolePermissionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RoleResponse"
+            }
+          }
+        }
+      }   
+    },
+    "/permissions": {
+      "get": {
+        "tags": ["Permissions"],
+        "summary": "Get all permissions in system",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PermissionsCollection"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Permissions"],
+        "summary": "Creates a permission in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PermissionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PermissionResponse"
+            }
+          }
+        }
+      }
+    },
+    "/permissions/{permissionId}": {
+      "patch": {
+        "tags": ["Permissions"],
+        "summary": "Updates a permission in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PermissionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PermissionResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Permissions"],
+        "summary": "Deletes a permission in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "permisisonId",
+            "in": "path",
+            "description": "Permission ID of the permission to delete",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LoginResponse": {
+      "properties": {
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "role": {
+          "type": "object",
+          "$ref": "#/definitions/RoleResponse"
+        },
+        "permissions": {
+          "type": "array",
+          "$ref": "#/definitions/PermissionResponse"
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "LoginRequest": {
+      "properties": {
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "password": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        }
+      }
+    },
+    "RegisterRequest": {
+      "properties": {
+        "first_name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "last_name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "email": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "password": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 32
+        }
+      }
+    },
+    "RegisterResponse": {
+      "properties": {
+        "first_name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "last_name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "email": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "role": {
+          "type": "object",
+          "$ref": "#/definitions/RoleResponse"
+        },
+        "permissions": {
+          "type": "array",
+          "$ref": "#/definitions/PermissionResponse"
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },        
+    "UserRolesRequest": {
+        "properties": {
+          "permissions": {
+            "type": "array",
+            "items" : {           
+              "type": "string"
+            },
+            "example": ["role1", "role2", "role3"]
+          }
+        }
+      },    
+    "RolePermissionRequest": {
+      "properties": {
+        "permissions": {
+          "type": "array",
+          "items" : {           
+            "type": "string"
+          },
+          "example": ["permission1", "permission2", "permission3"]
+        }
+      }
+    },
+    "RoleRequest": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "uniqueItems": true
+        }      
+      }
+    },
+    "PermissionRequest": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "uniqueItems": true
+        }      
+      }
+    },
+    "UserResponse": {
+      "required": ["first_name", "last_name", "email", "password"],
+      "properties": {
+        "_id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "first_name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "last_name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "email": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "roles": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 32
+            }
+          }
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 32
+              }
+            }
+          }
+        }
+      }
+    },
+    "RoleResponse": {
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        }
+      }
+    },
+    "PermissionResponse": {
+      "properties": {
+        "_id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        }
+      }
+    },
+    "UsersCollection": {
+      "properties": {
+        "docs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "uniqueItems": true
+              },
+              "first_name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 32
+              },
+              "last_name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 32
+              },
+              "email": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 32
+              }
+            }
+          }
+        },
+        "totalDocs": {
+          "type": "integer"
+        },
+        "limit": {
+          "type": "integer",
+          "default": 10
+        },
+        "page": {
+          "type": "integer",
+          "default": 1
+        },
+        "pagingCounter": {
+          "type": "integer",
+          "default": 1
+        },
+        "hasPrevPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "hasNextPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "prevPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "nextPage": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "PermissionsCollection": {
+      "properties": {
+        "docs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "uniqueItems": true
+              },
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 32
+              }
+            }
+          }
+        },
+        "totalDocs": {
+          "type": "integer"
+        },
+        "limit": {
+          "type": "integer",
+          "default": 10
+        },
+        "page": {
+          "type": "integer",
+          "default": 1
+        },
+        "pagingCounter": {
+          "type": "integer",
+          "default": 1
+        },
+        "hasPrevPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "hasNextPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "prevPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "nextPage": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "RolesCollection": {
+      "properties": {
+        "docs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "uniqueItems": true
+              },
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 32
+              }
+            }
+          }
+        },
+        "totalDocs": {
+          "type": "integer"
+        },
+        "limit": {
+          "type": "integer",
+          "default": 10
+        },
+        "page": {
+          "type": "integer",
+          "default": 1
+        },
+        "pagingCounter": {
+          "type": "integer",
+          "default": 1
+        },
+        "hasPrevPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "hasNextPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "prevPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "nextPage": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "UserModel": {
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "first_name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "last_name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "email": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        },
+        "password": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 32
+        }
+      }
+    },
+    "RoleModel": {
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        }
+      }
+    },
+    "PermissionModel": {
+      "required": ["name"],
+      "properties": {
+        "_id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        }
+      }
+    }
+  }
+}

@@ -1,20 +1,26 @@
 import { validateRequest } from "../middlewares/Validation";
-import { getUserResponse, listUsersResponse, createUserResponse, updateUserResponse, deleteUserResponse } from "../controllers/Users";
-import { getUserValidate, listUsersValidate, createUserValidate, updateUserValidate, deleteUserValidate } from "../validations/Users";
+import { validateAuth } from "../middlewares/Auth";
+import { getUserResponse, listUsersResponse, createUserResponse, updateUserResponse, deleteUserResponse , addUserRoleResponse} from "../controllers/Users";
+import { getUserValidate, listUsersValidate, createUserValidate, updateUserValidate, deleteUserValidate , addUserRoleValidate} from "../validations/Users";
 
 module.exports = (app) => {
-  app.get("/users", [listUsersValidate, validateRequest], listUsersResponse);
-  app.get("/users/:userId", [getUserValidate, validateRequest], getUserResponse);
-  app.post("/users", [createUserValidate, validateRequest], createUserResponse);
+  app.get("/users", [validateAuth('users.index'),listUsersValidate, validateRequest], listUsersResponse);
+  app.get("/users/:userId", [validateAuth('users.get'),getUserValidate, validateRequest], getUserResponse);
+  app.post("/users", [validateAuth('users.create'),createUserValidate, validateRequest], createUserResponse);
   app.patch(
-    "/users",
-    [updateUserValidate, validateRequest],
+    "/users/:userId",
+    [validateAuth('users.update'),updateUserValidate, validateRequest],
     updateUserResponse
   );
   app.delete(
-    "/users",
-    [deleteUserValidate, validateRequest],
+    "/users/:userId",
+    [validateAuth('users.delete'),deleteUserValidate, validateRequest],
     deleteUserResponse
+  );
+  app.post(
+    "/users/:userId/role",
+    [validateAuth('users.role'),addUserRoleValidate, validateRequest],
+    addUserRoleResponse
   );
 
   return app;

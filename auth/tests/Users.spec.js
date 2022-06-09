@@ -226,7 +226,7 @@ describe("Users ", () => {
     userObj.last_name = faker.name.lastName();
 
     // Act
-    const response = await request.patch("/api/users").send(userObj);
+    const response = await request.patch("/api/users/" + userModel._id).send(userObj);
 
     // Assert    ;
     expect(response.statusCode).toBe(200);
@@ -249,7 +249,7 @@ describe("Users ", () => {
     userObj.password = faker.internet.password();
 
     // Act
-    let response = await request.patch("/api/users").send(userObj);
+    let response = await request.patch("/api/users/" + userModel._id).send(userObj);
 
     // Assert;
     response = await request.post("/api/auth/login").send({
@@ -263,5 +263,55 @@ describe("Users ", () => {
     expect(response.body.hasOwnProperty("token")).toBeTruthy();
     expect(response.body.hasOwnProperty("role")).toBeTruthy();
     expect(response.body.hasOwnProperty("permissions")).toBeTruthy();
+  });
+
+  test("Deletes a user", async () => {
+    // Arrange
+    let userObj = {
+      first_name: faker.name.firstName(),
+      last_name: faker.name.lastName(),
+      email: faker.internet.email().toLocaleLowerCase(),
+      password: faker.internet.password(),
+      role: await UserServiceObj.getDefaultUserRole(),
+    };
+
+    const userModel = await UserServiceObj.User.create(userObj);
+
+    // Act
+    const response = await request.delete("/api/users/" + userModel._id).send(userObj);
+
+    // Assert
+    expect(response.statusCode).toBe(204);
+
+    let newUserModel = await UserServiceObj.User.findById(userModel._id);
+    expect(newUserModel).toBeNull()
+
+  });
+
+
+  test("Change a user role", async () => {    
+    // Arrange
+    let userObj = {
+      first_name: faker.name.firstName(),
+      last_name: faker.name.lastName(),
+      email: faker.internet.email().toLocaleLowerCase(),
+      password: faker.internet.password(),
+    };
+    const userModel = await UserServiceObj.User.create(userObj);
+
+    let roleObj = {
+      "role" :"admin"
+    } 
+
+    // Act
+    const response = await request.post("/api/users/" + userModel._id + '/role').send(roleObj);
+
+    // Assert
+    expect(response.statusCode).toBe(200);
+    expect(response.header["content-type"]).toMatch(/json/);
+    expect(response.body.hasOwnProperty("email")).toBeTruthy();    
+    expect(response.body.hasOwnProperty("role")).toBeTruthy();
+    expect(response.body.hasOwnProperty("permissions")).toBeTruthy();
+    expect(response.body.role.name).toEqual(roleObj.role);
   });
 });
