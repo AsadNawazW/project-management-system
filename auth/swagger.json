@@ -131,6 +131,34 @@
       }
     },
     "/users/{userId}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Gets a user in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User ID of the user to update",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          }
+        }
+      },
       "patch": {
         "tags": ["Users"],
         "summary": "Updates a user in system",
