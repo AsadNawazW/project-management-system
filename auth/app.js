@@ -43,6 +43,8 @@ function boot(app)
     app.use(helmet.referrerPolicy());
     app.use(helmet.xssFilter());
 
+    // Allow Nginx X-Forwarded headers to work
+    app.enable('trust proxy')
 
     return app    
 }
