@@ -50,7 +50,8 @@
         "parameters": [
           {
             "in": "body",
-            "name": "body",            
+            "name": "body",      
+            "type": "object",      
             "required": true,
             "schema": {
               "$ref": "#/definitions/LoginRequest"

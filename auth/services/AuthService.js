@@ -125,14 +125,16 @@ class AuthService extends BaseService {
       const { email, password } = req.body;
 
        // Validate if user exist in our database
-      const user = await this.User.findOne({ email });
-      const role=  await this.getUserRole(user)
-      const permissions = await this.getUserPermissions(user)
-      
-      const { first_name, last_name} = user;
+       const user = await this.User.findOne({ email });
 
       if (user && (await bcrypt.compare(password, user.password))) 
       {
+
+        const role=  await this.getUserRole(user)
+        const permissions = await this.getUserPermissions(user)
+        
+        const { first_name, last_name} = user;
+
         // Create token
         const token = jwt.sign(
           {
