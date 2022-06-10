@@ -43,6 +43,8 @@ function boot(app)
     app.use(helmet.referrerPolicy());
     app.use(helmet.xssFilter());
 
+    // Allow Nginx X-Forwarded headers to work
+    app.enable('trust proxy')
 
     return app    
 }
@@ -76,7 +78,7 @@ function registerRoutes()
     app.use('/api', apiPermissionRoutes)
 
     app.use('/api-docs', function(req, res, next){
-        swaggerDocument.host = req.get('host');
+        swaggerDocument.host = req.get('host') + '/api';
         req.swaggerDoc = swaggerDocument;
         next();
     },

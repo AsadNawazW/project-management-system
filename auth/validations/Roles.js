@@ -5,30 +5,47 @@ const listRolesValidate = [
 
 ]
 
+let roleIdValidation = param('roleId')
+.exists()
+.withMessage('roleId parameter not found in the url')
+.bail()
+.isLength({min:2,max:32})
+.withMessage('roleId field must be greater than 2 characters and less than 32 characters')
+.bail()
+
+
+let roleNameValidation = check('name')
+.exists()
+.withMessage('name field is required')
+.bail()
+.isLength({min:2,max:32})
+.withMessage('name field must be greater than 2 characters and less than 32 characters')
+.bail()
+
+let permissionArrayValidation = check('permissions','Permissions are required in array format').exists().bail()
+
 const getRoleValidate = [
-    param('roleId','Role ID is required').exists().bail().isLength({min:2,max:32}).bail(),
+    roleIdValidation
 ]
 const createRoleValidate = [
-    check('name','Role Name is required').exists().bail().isLength({min:2,max:32}).bail(),
+    roleNameValidation
 ]
 const updateRoleValidate = [
-    param('roleId','Role ID is required').exists().bail().isLength({min:2,max:32}).bail(),
-    check('name','Role Name is required').exists().bail().isLength({min:2,max:32}).bail(),    
+    roleIdValidation,
+    roleNameValidation
 ]
 const deleteRoleValidate = [
-    param('roleId','Role ID is required').exists().bail().isLength({min:2,max:32}).bail(),    
+    roleIdValidation,
 ]
-
 const createRolePermissionValidate = [
-    param('roleId','Role ID is required').exists().bail().isLength({min:2,max:32}).bail(),    
-    check('permissions','Permissions are required in array format').exists().bail(),
+    roleIdValidation,
+    permissionArrayValidation
 ]
 const deleteRolePermissionValidate = [
-    param('roleId','Role ID is required').exists().bail().isLength({min:2,max:32}).bail(),    
-    check('permissions','Permissions are required in array format').exists().bail(),
+    roleIdValidation,
+    permissionArrayValidation
+    
 ]
-
-
 
 module.exports =  {
     listRolesValidate,

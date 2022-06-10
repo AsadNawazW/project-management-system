@@ -39,7 +39,7 @@
       "description": "JWT Authorization header"
     }
   },
-  "schemes": ["http"],
+  "schemes": ["http","https"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
@@ -50,7 +50,8 @@
         "parameters": [
           {
             "in": "body",
-            "name": "body",            
+            "name": "body",      
+            "type": "object",      
             "required": true,
             "schema": {
               "$ref": "#/definitions/LoginRequest"
@@ -130,6 +131,34 @@
       }
     },
     "/users/{userId}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Gets a user in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User ID of the user to update",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          }
+        }
+      },
       "patch": {
         "tags": ["Users"],
         "summary": "Updates a user in system",

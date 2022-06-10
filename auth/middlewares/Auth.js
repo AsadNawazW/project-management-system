@@ -2,9 +2,14 @@ import jwt from "jsonwebtoken";
 
 
 const validateAuth = (permissionName = undefined) => {
-    return (req, res, next) => {   
+    return (req, res, next) => {           
+        
+        let bypass_acl = process.env.BYPASS_ACL || 0 
 
-        return next();
+        if(bypass_acl)
+        {
+            return next();
+        }
         
         let access_token = req.body.access_token || req.query.access_token || req.headers["x-access-token"];
 
