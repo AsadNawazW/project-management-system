@@ -78,7 +78,7 @@ function registerRoutes()
     app.use('/api', apiPermissionRoutes)
 
     app.use('/api-docs', function(req, res, next){
-        swaggerDocument.host = req.get('host');
+        swaggerDocument.host = req.get('host') + '/api';
         req.swaggerDoc = swaggerDocument;
         next();
     },
