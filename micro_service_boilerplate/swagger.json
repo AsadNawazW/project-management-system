@@ -1,0 +1,213 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Model Micro Service",
+    "description": "Provides documentation to consume API of Model Micro Service",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "127.0.0.1:12000/api/",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Models",
+      "description": "API for CRUD of  Models in the system"
+    }
+  ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "name": "Authorization",
+      "in": "header",
+      "scheme": "bearer",
+      "type": "apiKey",
+      "bearerFormat": "JWT",
+      "description": "JWT Authorization header"
+    }
+  },
+  "schemes": ["http","https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {  
+    "/models": {
+      "get": {
+        "tags": ["Models"],
+        "summary": "Get all models in system",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelsCollection"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Models"],
+        "summary": "Creates a model in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ModelRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelResponse"
+            }
+          }
+        }
+      }
+    },
+    "/models/{modelId}": {
+      "patch": {
+        "tags": ["Models"],
+        "summary": "Updates a model in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",            
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ModelRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ModelResponse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Models"],
+        "summary": "Deletes a model in system",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "permisisonId",
+            "in": "path",
+            "description": "Model ID of the model to delete",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    
+    "ModelRequest": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "uniqueItems": true
+        }      
+      }
+    },
+    "ModelResponse": {
+      "properties": {
+        "_id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        }
+      }
+    },
+    "ModelsCollection": {
+      "properties": {
+        "docs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "uniqueItems": true
+              },
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 32
+              }
+            }
+          }
+        },
+        "totalDocs": {
+          "type": "integer"
+        },
+        "limit": {
+          "type": "integer",
+          "default": 10
+        },
+        "page": {
+          "type": "integer",
+          "default": 1
+        },
+        "pagingCounter": {
+          "type": "integer",
+          "default": 1
+        },
+        "hasPrevPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "hasNextPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "prevPage": {
+          "type": "boolean",
+          "default": false
+        },
+        "nextPage": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "ModelModel": {
+      "required": ["name"],
+      "properties": {
+        "_id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 32
+        }
+      }
+    }
+  }
+}
