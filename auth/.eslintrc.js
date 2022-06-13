@@ -10,7 +10,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  ignorePatterns: ['server.js', '**/tests/*.spec.js'],
+  ignorePatterns: ['ser1ver.js', '**/tests/*.spec.js'],
   rules: {
     'no-await-in-loop': 'off',
     'no-console': 'off',
