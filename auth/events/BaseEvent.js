@@ -2,7 +2,6 @@ import initKafka from '../kafka/init';
 
 class BaseEvent {
   constructor() {
-    console.log('Base Event Constructor Called');
     const kafka = initKafka();
     this.producer = kafka.producer();
     this.kafkaAdmin = kafka.admin();

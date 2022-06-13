@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import UserEvents from '../events/UserEvents';
 
 const UserService = class {
   constructor() {
@@ -173,6 +174,14 @@ const UserService = class {
       role: await this.getUserRole(oldUser),
       permissions: await this.getUserPermissions(oldUser),
     });
+  }
+
+  emitEvents(key, value, topic = undefined) {
+    if (this.eventEmitter === undefined) {
+      this.eventEmitter = new UserEvents();
+    }
+
+    this.eventEmitter[key](value, topic);
   }
 };
 
