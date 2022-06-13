@@ -1,19 +1,13 @@
-
-
 class BaseService {
-    constructor()
-    {
+  constructor() {
+    
+  }
 
-    }
-
-    sendErrorResponse(message)
-    {
-        return {
-            error: message
-        }
-    }
-
+  sendErrorResponse(message) {
+    return {
+      error: message,
+    };
+  }
 }
 
-
-module.exports = BaseService;
+export default BaseService;

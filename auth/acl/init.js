@@ -1,114 +1,95 @@
 // Import Models
-import Role from "../models/Role";
-import Permission from "../models/Permission";
-import RolePermission from "../models/RolePermission";
+import Role from '../models/Role';
+import Permission from '../models/Permission';
+import RolePermission from '../models/RolePermission';
 
-async function initAcl(){
+export default async function initAcl() {
+  const defaultRoles = [
+    'user',
+    'admin',
+  ];
 
-    let defaultRoles = [
-        'user',
-        'admin'
-    ];
-    
-    let defaultPermissions = [
-        'profile'
-    ];
-    
-    let defaultRolePermissions = [
-        
-        'user:profile',    
-        'admin:profile',        
-        'admin:users.index',
-        'admin:users.get',
-        'admin:users.create',
-        'admin:users.update',
-        'admin:users.delete',
-        'admin:users.role',
-        'admin:roles.index',
-        'admin:roles.get',
-        'admin:roles.create',
-        'admin:roles.update',
-        'admin:roles.delete',
-        'admin:permissions.index',
-        'admin:permissions.get',
-        'admin:permissions.create',
-        'admin:permissions.update',
-        'admin:permissions.delete',        
-    ]
+  const defaultPermissions = [
+    'profile',
+  ];
 
-    
-    let defaultPermission;
-    let defaultRole;
-    let defaultRolePermission;
-    let defaultRolePermissionArray;
+  const defaultRolePermissions = [
 
-    for (const element of defaultRoles) {    
+    'user:profile',
+    'admin:profile',
+    'admin:users.index',
+    'admin:users.get',
+    'admin:users.create',
+    'admin:users.update',
+    'admin:users.delete',
+    'admin:users.role',
+    'admin:roles.index',
+    'admin:roles.get',
+    'admin:roles.create',
+    'admin:roles.update',
+    'admin:roles.delete',
+    'admin:permissions.index',
+    'admin:permissions.get',
+    'admin:permissions.create',
+    'admin:permissions.update',
+    'admin:permissions.delete',
+  ];
 
-        defaultRole = await Role.findOne({ name : element });
+  let defaultPermission;
+  let defaultRole;
+  let defaultRolePermissionArray;
 
-        if (!defaultRole) {
-            defaultRole = await Role.create({
-                name: element
-            });
-        }
+  for (const element of defaultRoles) {
+    defaultRole = await Role.findOne({ name: element });
+
+    if (!defaultRole) {
+      defaultRole = await Role.create({
+        name: element,
+      });
     }
-   
-    for (const element of defaultPermissions) 
-    {    
+  }
 
-        defaultPermission = await Permission.findOne({ name : element });
-  
-        if (!defaultPermission) {
-            defaultPermission = await Permission.create({
-                name: element
-            });
-        }
+  for (const element of defaultPermissions) {
+    defaultPermission = await Permission.findOne({ name: element });
+
+    if (!defaultPermission) {
+      defaultPermission = await Permission.create({
+        name: element,
+      });
+    }
+  }
+
+  for (let defaultRolePermission of defaultRolePermissions) {
+    defaultRolePermissionArray = defaultRolePermission.split(':');
+
+    defaultRole = await Role.findOne({ name: defaultRolePermissionArray[0] });
+
+    if (!defaultRole) {
+      defaultRole = await Role.create({
+        name: defaultRolePermissionArray[0],
+      });
     }
 
+    defaultPermission = await Permission.findOne({ name: defaultRolePermissionArray[1] });
 
-    for (let defaultRolePermission of defaultRolePermissions) 
-    {     
+    if (!defaultPermission) {
+      defaultPermission = await Permission.create({
+        name: defaultRolePermissionArray[1],
+      });
+    }
 
-        defaultRolePermissionArray = defaultRolePermission.split(':')
+    defaultRolePermission = await RolePermission.findOne(
+      {
+        role: defaultRole,
+        permission: defaultPermission,
+      },
+    );
 
-        defaultRole = await Role.findOne({ name : defaultRolePermissionArray[0] });        
-         
-        if (!defaultRole) { 
-            defaultRole = await Role.create({
-                name: defaultRolePermissionArray[0]
-            });
-        }
-
-        defaultPermission = await Permission.findOne({ name : defaultRolePermissionArray[1] });
-
-        if (!defaultPermission) {  
-            defaultPermission = await Permission.create({
-                name: defaultRolePermissionArray[1]
-            });
-        }        
-
-        defaultRolePermission = await RolePermission.findOne(
-            {
-                role : defaultRole,
-                permission : defaultPermission 
-            }
-        );
-
-        if (!defaultRolePermission) 
-        {            
-            defaultRolePermission = await RolePermission.create({
-                role: defaultRole,
-                permission: defaultPermission
-            }); 
-
-        }
-
-    };
+    if (!defaultRolePermission) {
+      defaultRolePermission = await RolePermission.create({
+        role: defaultRole,
+        permission: defaultPermission,
+      });
+    }
+  }
 }
-
-
-module.exports = { initAcl }
-
-
- 
-   
