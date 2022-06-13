@@ -1,6 +1,6 @@
 class BaseService {
   constructor() {
-    
+
   }
 
   sendErrorResponse(message) {
@@ -8,6 +8,7 @@ class BaseService {
       error: message,
     };
   }
+
 }
 
 export default BaseService;

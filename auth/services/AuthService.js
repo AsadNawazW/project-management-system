@@ -8,6 +8,7 @@ import BaseService from './BaseService';
 import User from '../models/User';
 import UserService from './UserService';
 import RoleService from './RoleService';
+import AuthEvents from '../events/AuthEvents';
 
 class AuthService extends BaseService {
   constructor() {
@@ -95,6 +96,14 @@ class AuthService extends BaseService {
       // save user token
       user.token = token;
 
+
+      this.emitEvents('userRegistered', {
+        email: user.email,
+        role,
+        permissions,
+        token,
+      });
+
       // return new user
       res.status(201).json({
         firstName,
@@ -140,8 +149,12 @@ class AuthService extends BaseService {
           },
         );
 
-        // save user token
-        user.token = token;
+        this.emitEvents('userLoggedIn', {
+          email: user.email,
+          role,
+          permissions,
+          token,
+        });
 
         // user
         res.status(200).json({
@@ -157,6 +170,14 @@ class AuthService extends BaseService {
       console.log(err);
       res.status(500).send('Error!');
     }
+  }
+
+  emitEvents(key, value, topic = undefined) {
+    if (this.eventEmitter === undefined) {
+      this.eventEmitter = new AuthEvents();
+    }
+
+    this.eventEmitter[key](value, topic);
   }
 }
 
