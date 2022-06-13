@@ -1,221 +1,197 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-let RoleService = class {
+const RoleService = class {
   constructor() {
-    this.Role = require("../models/Role");
-    this.Permission = require("../models/Permission");
-    this.RolePermission = require("../models/RolePermission");
+    this.Role = require('../models/Role');
+    this.Permission = require('../models/Permission');
+    this.RolePermission = require('../models/RolePermission');
     this.paginateOptions = {
       page: 1,
       limit: 10,
-      select : [
-        'name'
-      ]
-    }
+      select: [
+        'name',
+      ],
+    };
   }
-  async getRolePermissionsArray(roleModel)
-  {
+
+  async getRolePermissionsArray(roleModel) {
     let rolePermissionsArr = await this.getRolePermissions(roleModel);
 
-    rolePermissionsArr = rolePermissionsArr.map(function(item){
-      return item.name      
-    })
+    rolePermissionsArr = rolePermissionsArr.map((item) => item.name);
 
     return rolePermissionsArr;
-
   }
-  async getRolePermissions(roleModel)
-  {
+
+  async getRolePermissions(roleModel) {
     let rolePermissionsArr = [];
-    let permissionArr = [];
+    const permissionArr = [];
 
-    let rolePermissions = await this.RolePermission.find({
-      role : roleModel
-    })
+    const rolePermissions = await this.RolePermission.find({
+      role: roleModel,
+    });
 
-    
-    if (!rolePermissions) {      
-      return rolePermissionsArr
-    }
-    
-    for(const rolePermission of rolePermissions)
-    {      
-      permissionArr.push(rolePermission.permission)
+    if (!rolePermissions) {
+      return rolePermissionsArr;
     }
 
-    rolePermissionsArr = await this.Permission.find({ _id: { $in : permissionArr}}).select('name')
+    for (const rolePermission of rolePermissions) {
+      permissionArr.push(rolePermission.permission);
+    }
 
-    return rolePermissionsArr
+    rolePermissionsArr = await this.Permission.find({ _id: { $in: permissionArr } }).select('name');
+
+    return rolePermissionsArr;
   }
 
-  async getRole(req,res)
-  {
-    
-    const oldRole = await this.Role.findById(req.params.roleId)
+  async getRole(req, res) {
+    const oldRole = await this.Role.findById(req.params.roleId);
 
     if (!oldRole) {
       res.status(404).send("Role doesn't exist!");
-      return
+      return;
     }
 
-    res.status(200).json({        
+    res.status(200).json({
       name: oldRole.name,
-      permissions : await this.getRolePermissionsArray(oldRole)      
+      permissions: await this.getRolePermissionsArray(oldRole),
+    });
+  }
+
+  async listRoles(req, res) {
+    const roles = await this.Role.paginate({}, this.paginateOptions);
+    res.status(200).send(roles);
+  }
+
+  async createRole(req, res) {
+    const { name } = req.body;
+
+    const oldRole = await this.Role.findOne({ name });
+
+    if (oldRole) {
+      res.status(409).send('Role Already Exist.');
+      return;
+    }
+
+    const role = await this.Role.create({
+      name,
     });
 
+    res.status(201).json({
+      name,
+      permissions: await this.getRolePermissionsArray(oldRole),
+    });
   }
 
-  async listRoles(req,res)
-  {
-    let roles = await this.Role.paginate({},this.paginateOptions)
-    res.status(200).send(roles)    
-  }
+  async updateRole(req, res) {
+    const { name } = req.body;
 
-
-  async createRole(req,res)
-  {
-      const { name } = req.body;
-
-      const oldRole = await this.Role.findOne({ name : name });
-
-      if (oldRole) {
-        res.status(409).send("Role Already Exist.");
-        return
-      }
-
-      const role = await this.Role.create({
-        name : name
-      })
-
-      res.status(201).json({        
-        name: name,
-        permissions : await this.getRolePermissionsArray(oldRole)
-      });
-
-  }
-  async updateRole(req,res)
-  {
-      const { name } = req.body;
-
-      const oldRole = await this.Role.findById(req.params.roleId)
-
-      if (!oldRole) {
-        res.status(404).send("Role doesn't exist.");
-        return
-      }
-      
-      oldRole.name = name
-      oldRole.save()
-
-      res.status(200).json({
-        name: oldRole.name,
-        permissions : await this.getRolePermissionsArray(oldRole)
-      });
-  }
-  async deleteRole(req,res)
-  {    
-    const oldRole = await this.Role.findById(req.params.roleId)
+    const oldRole = await this.Role.findById(req.params.roleId);
 
     if (!oldRole) {
       res.status(404).send("Role doesn't exist.");
-      return
+      return;
     }
 
-    oldRole.delete()
-    res.status(204).send()
-    
-  }
-  async createRolePermission(req,res)
-  {    
-    let permission;
-    let rolePermission;
+    oldRole.name = name;
+    oldRole.save();
 
-    const name  = req.params.name;    
-    const { permissions } = req.body;
-    
-    const role = await this.Role.findById(req.params.roleId)
-
-    if (!role) {
-      res.status(404).send("Role doesn't exist.");
-      return
-    }
-
-    
-    for(const permissionName of permissions)
-    {
-      permission = await this.Permission.findOne({ name : permissionName });
-      
-      if (!permission) {
-        res.status(404).send("Permission : " + permissionName + " doesn't exist.");
-        return;
-      }
-
-      rolePermission = await this.RolePermission.findOne(
-        {
-            role : role,
-            permission : permission 
-        }
-      );
-
-      if (!rolePermission) 
-      {            
-        rolePermission = await this.RolePermission.create({
-            role: role,
-            permission: permission
-        }); 
-
-      }
-    }
-
-    res.status(201).json({     
-      name: role.name,
-      permissions : await this.getRolePermissionsArray(role)
+    res.status(200).json({
+      name: oldRole.name,
+      permissions: await this.getRolePermissionsArray(oldRole),
     });
-
-
-
   }
-  async deleteRolePermission(req,res)
-  {
+
+  async deleteRole(req, res) {
+    const oldRole = await this.Role.findById(req.params.roleId);
+
+    if (!oldRole) {
+      res.status(404).send("Role doesn't exist.");
+      return;
+    }
+
+    oldRole.delete();
+    res.status(204).send();
+  }
+
+  async createRolePermission(req, res) {
     let permission;
     let rolePermission;
-       
+
+    const { name } = req.params;
     const { permissions } = req.body;
-    
-    const role = await this.Role.findById(req.params.roleId)
+
+    const role = await this.Role.findById(req.params.roleId);
 
     if (!role) {
       res.status(404).send("Role doesn't exist.");
-      return
+      return;
     }
 
-    
-    for(const permissionName of permissions)
-    {
-      permission = await this.Permission.findOne({ name : permissionName });
-      
+    for (const permissionName of permissions) {
+      permission = await this.Permission.findOne({ name: permissionName });
+
       if (!permission) {
-        res.status(404).send("Permission : " + permissionName + " doesn't exist.");
+        res.status(404).send(`Permission : ${permissionName} doesn't exist.`);
         return;
       }
 
       rolePermission = await this.RolePermission.findOne(
         {
-            role : role,
-            permission : permission 
-        }
+          role,
+          permission,
+        },
       );
 
-      if (rolePermission) 
-      {            
-        rolePermission.delete()
+      if (!rolePermission) {
+        rolePermission = await this.RolePermission.create({
+          role,
+          permission,
+        });
       }
     }
 
-    res.status(204).send()
+    res.status(201).json({
+      name: role.name,
+      permissions: await this.getRolePermissionsArray(role),
+    });
   }
-  
-}; 
+
+  async deleteRolePermission(req, res) {
+    let permission;
+    let rolePermission;
+
+    const { permissions } = req.body;
+
+    const role = await this.Role.findById(req.params.roleId);
+
+    if (!role) {
+      res.status(404).send("Role doesn't exist.");
+      return;
+    }
+
+    for (const permissionName of permissions) {
+      permission = await this.Permission.findOne({ name: permissionName });
+
+      if (!permission) {
+        res.status(404).send(`Permission : ${permissionName} doesn't exist.`);
+        return;
+      }
+
+      rolePermission = await this.RolePermission.findOne(
+        {
+          role,
+          permission,
+        },
+      );
+
+      if (rolePermission) {
+        rolePermission.delete();
+      }
+    }
+
+    res.status(204).send();
+  }
+};
 
 module.exports = RoleService;
