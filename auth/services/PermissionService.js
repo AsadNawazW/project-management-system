@@ -7,18 +7,15 @@ const PermissionService = class {
     this.paginateOptions = {
       page: 1,
       limit: 10,
-      select: [
-        'name',
-      ],
+      select: ['name'],
     };
   }
 
-  async getRolesWithThisPermission(roleModel) {
-
-  }
 
   async getPermission(req, res) {
-    const oldPermission = await this.Permission.findById(req.params.permissionId);
+    const oldPermission = await this.Permission.findById(
+      req.params.permissionId,
+    );
 
     if (!oldPermission) {
       res.status(404).send("Permission doesn't exist!");
@@ -31,7 +28,10 @@ const PermissionService = class {
   }
 
   async listPermissions(req, res) {
-    const permissions = await this.Permission.paginate({}, this.paginateOptions);
+    const permissions = await this.Permission.paginate(
+      {},
+      this.paginateOptions,
+    );
     res.status(200).send(permissions);
   }
 
@@ -57,7 +57,9 @@ const PermissionService = class {
   async updatePermission(req, res) {
     const { name } = req.body;
 
-    const oldPermission = await this.Permission.findById(req.params.permissionId);
+    const oldPermission = await this.Permission.findById(
+      req.params.permissionId,
+    );
 
     if (!oldPermission) {
       res.status(404).send("Permission doesn't exist.");
@@ -73,7 +75,9 @@ const PermissionService = class {
   }
 
   async deletePermission(req, res) {
-    const oldPermission = await this.Permission.findById(req.params.permissionId);
+    const oldPermission = await this.Permission.findById(
+      req.params.permissionId,
+    );
 
     if (!oldPermission) {
       res.status(404).send("Permission doesn't exist.");

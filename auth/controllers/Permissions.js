@@ -3,26 +3,18 @@ import PermissionService from '../services/PermissionService';
 
 const PermissionServiceObj = new PermissionService();
 
-const listPermissionsResponse = async (req, res) => {
+export const listPermissionsResponse = async (req, res) => {
   await PermissionServiceObj.listPermissions(req, res);
 };
-const getPermissionResponse = async (req, res) => {
+export const getPermissionResponse = async (req, res) => {
   await PermissionServiceObj.getPermission(req, res);
 };
-const createPermissionResponse = async (req, res) => {
+export const createPermissionResponse = async (req, res) => {
   await PermissionServiceObj.createPermission(req, res);
 };
-const updatePermissionResponse = async (req, res) => {
+export const updatePermissionResponse = async (req, res) => {
   await PermissionServiceObj.updatePermission(req, res);
 };
-const deletePermissionResponse = async (req, res) => {
+export const deletePermissionResponse = async (req, res) => {
   await PermissionServiceObj.deletePermission(req, res);
-};
-
-module.exports = {
-  listPermissionsResponse,
-  getPermissionResponse,
-  createPermissionResponse,
-  updatePermissionResponse,
-  deletePermissionResponse,
 };

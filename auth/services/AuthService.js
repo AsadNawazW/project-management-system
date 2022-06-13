@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 // Local Imports
-import ac from '../acl/init';
+
 import BaseService from './BaseService';
 import User from '../models/User';
 import UserService from './UserService';
@@ -47,7 +47,7 @@ class AuthService extends BaseService {
     try {
       // Get user input
       const {
-        first_name, last_name, email, password,
+        firstName, lastName, email, password,
       } = req.body;
 
       // check if user already exist
@@ -67,8 +67,8 @@ class AuthService extends BaseService {
 
       // Create user in our database
       const user = await this.User.create({
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         email: email.toLowerCase(), // sanitize: convert email to lowercase
         password: encryptedPassword,
         role,
@@ -80,9 +80,9 @@ class AuthService extends BaseService {
       // Create token
       const token = jwt.sign(
         {
-          user_id: user._id,
-          first_name,
-          last_name,
+          userId: user._id,
+          firstName,
+          lastName,
           email,
           role: role.name,
           permissions,
@@ -97,8 +97,8 @@ class AuthService extends BaseService {
 
       // return new user
       res.status(201).json({
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         email: email.toLowerCase(),
         role: role.name,
         permissions,
@@ -122,14 +122,14 @@ class AuthService extends BaseService {
         const role = await this.getUserRole(user);
         const permissions = await this.getUserPermissions(user);
 
-        const { first_name, last_name } = user;
+        const { firstName, lastName } = user;
 
         // Create token
         const token = jwt.sign(
           {
-            user_id: user._id,
-            first_name,
-            last_name,
+            userId: user._id,
+            firstName,
+            lastName,
             email,
             role: role.name,
             permissions,
@@ -160,4 +160,4 @@ class AuthService extends BaseService {
   }
 }
 
-module.exports = AuthService;
+export default AuthService;

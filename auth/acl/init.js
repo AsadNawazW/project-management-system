@@ -37,7 +37,6 @@ export default async function initAcl() {
 
   let defaultPermission;
   let defaultRole;
-  let defaultRolePermission;
   let defaultRolePermissionArray;
 
   for (const element of defaultRoles) {

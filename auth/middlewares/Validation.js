@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator';
 
-const validateRequest = function (req, res, next) {
+const validateRequest = (req, res, next) => {
   const err = validationResult(req);
 
   if (err.errors.length > 0) {
@@ -11,6 +11,4 @@ const validateRequest = function (req, res, next) {
   return next();
 };
 
-module.exports = {
-  validateRequest,
-};
+export default validateRequest;

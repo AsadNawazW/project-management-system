@@ -2,9 +2,13 @@ import supertest from 'supertest';
 import { faker } from '@faker-js/faker';
 import http from 'http';
 import {
-  initDb, closeConnection, dropDatabase, dropCollection, clearDatabase,
+  initDb,
+  closeConnection,
+  dropDatabase,
+  dropCollection,
+  clearDatabase,
 } from '../database/init';
-import { initAcl } from '../acl/init';
+import initAcl from '../acl/init';
 import { boot, registerRoutes } from '../app';
 
 import UserService from '../services/UserService';
@@ -71,8 +75,8 @@ describe('Users ', () => {
   test('login route with correct username and password works', async () => {
     // Arrange
     const req = {
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email().toLocaleLowerCase(),
       password: faker.internet.password(),
     };
@@ -100,8 +104,8 @@ describe('Users ', () => {
   test('login route with incorrect username and password gives 401', async () => {
     // Arrange
     const req = {
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email().toLocaleLowerCase(),
       password: faker.internet.password(),
     };
@@ -134,8 +138,8 @@ describe('Users ', () => {
   test('register route works with parameters', async () => {
     // Arrange
     const req = {
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email().toLocaleLowerCase(),
       password: faker.internet.password(),
     };
@@ -166,8 +170,8 @@ describe('Users ', () => {
   test('Get a single user', async () => {
     // Arrange
     const userObj = {
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email().toLocaleLowerCase(),
       password: faker.internet.password(),
       role: await UserServiceObj.getDefaultUserRole(),
@@ -189,8 +193,8 @@ describe('Users ', () => {
   test('Create a new user', async () => {
     // Arrange
     const req = {
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email().toLocaleLowerCase(),
       password: faker.internet.password(),
     };
@@ -209,32 +213,34 @@ describe('Users ', () => {
   test('Updates a user without sending password', async () => {
     // Arrange
     const userObj = {
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email().toLocaleLowerCase(),
       password: faker.internet.password(),
     };
 
     const userModel = await UserServiceObj.User.create(userObj);
 
-    userObj.first_name = faker.name.firstName();
-    userObj.last_name = faker.name.lastName();
+    userObj.firstName = faker.name.firstName();
+    userObj.lastName = faker.name.lastName();
 
     // Act
-    const response = await request.patch(`/api/users/${userModel._id}`).send(userObj);
+    const response = await request
+      .patch(`/api/users/${userModel._id}`)
+      .send(userObj);
 
     // Assert    ;
     expect(response.statusCode).toBe(200);
     expect(response.header['content-type']).toMatch(/json/);
-    expect(response.body.first_name).toEqual(userObj.first_name);
-    expect(response.body.last_name).toEqual(userObj.last_name);
+    expect(response.body.firstName).toEqual(userObj.firstName);
+    expect(response.body.lastName).toEqual(userObj.lastName);
   });
 
   test("Updates a user's password", async () => {
     // Arrange
     const userObj = {
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email().toLocaleLowerCase(),
       password: faker.internet.password(),
     };
@@ -244,7 +250,9 @@ describe('Users ', () => {
     userObj.password = faker.internet.password();
 
     // Act
-    let response = await request.patch(`/api/users/${userModel._id}`).send(userObj);
+    let response = await request
+      .patch(`/api/users/${userModel._id}`)
+      .send(userObj);
 
     // Assert;
     response = await request.post('/api/auth/login').send({
@@ -263,8 +271,8 @@ describe('Users ', () => {
   test('Deletes a user', async () => {
     // Arrange
     const userObj = {
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email().toLocaleLowerCase(),
       password: faker.internet.password(),
       role: await UserServiceObj.getDefaultUserRole(),
@@ -273,7 +281,9 @@ describe('Users ', () => {
     const userModel = await UserServiceObj.User.create(userObj);
 
     // Act
-    const response = await request.delete(`/api/users/${userModel._id}`).send(userObj);
+    const response = await request
+      .delete(`/api/users/${userModel._id}`)
+      .send(userObj);
 
     // Assert
     expect(response.statusCode).toBe(204);
@@ -285,8 +295,8 @@ describe('Users ', () => {
   test('Change a user role', async () => {
     // Arrange
     const userObj = {
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email().toLocaleLowerCase(),
       password: faker.internet.password(),
     };
@@ -297,7 +307,9 @@ describe('Users ', () => {
     };
 
     // Act
-    const response = await request.post(`/api/users/${userModel._id}/role`).send(roleObj);
+    const response = await request
+      .post(`/api/users/${userModel._id}/role`)
+      .send(roleObj);
 
     // Assert
     expect(response.statusCode).toBe(200);

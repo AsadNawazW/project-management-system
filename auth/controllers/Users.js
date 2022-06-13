@@ -3,30 +3,21 @@ import UserService from '../services/UserService';
 
 const UserServiceObj = new UserService();
 
-const listUsersResponse = async (req, res) => {
+export const listUsersResponse = async (req, res) => {
   await UserServiceObj.listUsers(req, res);
 };
-const getUserResponse = async (req, res) => {
+export const getUserResponse = async (req, res) => {
   await UserServiceObj.getUser(req, res);
 };
-const createUserResponse = async (req, res) => {
+export const createUserResponse = async (req, res) => {
   await UserServiceObj.createUser(req, res);
 };
-const updateUserResponse = async (req, res) => {
+export const updateUserResponse = async (req, res) => {
   await UserServiceObj.updateUser(req, res);
 };
-const deleteUserResponse = async (req, res) => {
+export const deleteUserResponse = async (req, res) => {
   await UserServiceObj.deleteUser(req, res);
 };
-const addUserRoleResponse = async (req, res) => {
+export const addUserRoleResponse = async (req, res) => {
   await UserServiceObj.addUserRole(req, res);
-};
-
-module.exports = {
-  listUsersResponse,
-  getUserResponse,
-  createUserResponse,
-  updateUserResponse,
-  deleteUserResponse,
-  addUserRoleResponse,
 };

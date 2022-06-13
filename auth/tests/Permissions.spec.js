@@ -2,25 +2,27 @@ import supertest from 'supertest';
 import { faker } from '@faker-js/faker';
 import http from 'http';
 import {
-  initDb, closeConnection, dropDatabase, dropCollection, clearDatabase,
+  initDb,
+  closeConnection,
+  clearDatabase,
 } from '../database/init';
-import { initAcl } from '../acl/init';
-import { boot, registerRoutes } from '../app';
 
+import initAcl from '../acl/init';
+import { registerRoutes } from '../app';
 import PermissionService from '../services/PermissionService';
 
 require('dotenv').config({ path: '.env.test', debug: true });
 
-const mockResponse = () => {
-  const res = {};
-  res.status = jest.fn().mockReturnValue(res);
-  res.json = jest.fn().mockReturnValue(res);
-  return res;
-};
+// const mockResponse = () => {
+//   const res = {};
+//   res.status = jest.fn().mockReturnValue(res);
+//   res.json = jest.fn().mockReturnValue(res);
+//   return res;
+// };
 
-const mockRequest = (bodyData) => ({
-  body: bodyData,
-});
+// const mockRequest = (bodyData) => ({
+//   body: bodyData,
+// });
 
 const PermissionServiceObj = new PermissionService();
 
@@ -67,10 +69,14 @@ describe('Permissions ', () => {
       name: faker.name.firstName(),
     };
 
-    const permissionModel = await PermissionServiceObj.Permission.create(permissionObj);
+    const permissionModel = await PermissionServiceObj.Permission.create(
+      permissionObj,
+    );
 
     // Act
-    const response = await request.get(`/api/permissions/${permissionModel._id}`);
+    const response = await request.get(
+      `/api/permissions/${permissionModel._id}`,
+    );
 
     // Assert
     expect(response.statusCode).toBe(200);
@@ -99,12 +105,16 @@ describe('Permissions ', () => {
       name: faker.name.firstName(),
     };
 
-    const permissionModel = await PermissionServiceObj.Permission.create(permissionObj);
+    const permissionModel = await PermissionServiceObj.Permission.create(
+      permissionObj,
+    );
 
     permissionObj.name = faker.name.firstName();
 
     // Act
-    const response = await request.patch(`/api/permissions/${permissionModel._id}`).send(permissionObj);
+    const response = await request
+      .patch(`/api/permissions/${permissionModel._id}`)
+      .send(permissionObj);
 
     // Assert    ;
 
@@ -119,15 +129,21 @@ describe('Permissions ', () => {
       name: faker.name.firstName(),
     };
 
-    const permissionModel = await PermissionServiceObj.Permission.create(permissionObj);
+    const permissionModel = await PermissionServiceObj.Permission.create(
+      permissionObj,
+    );
 
     // Act
-    const response = await request.delete(`/api/permissions/${permissionModel._id}`).send();
+    const response = await request
+      .delete(`/api/permissions/${permissionModel._id}`)
+      .send();
 
     // Assert
     expect(response.statusCode).toBe(204);
 
-    const newPermissionModel = await PermissionServiceObj.Permission.findOne({ name: permissionObj.name });
+    const newPermissionModel = await PermissionServiceObj.Permission.findOne({
+      name: permissionObj.name,
+    });
     expect(newPermissionModel).toBeNull();
   });
 });

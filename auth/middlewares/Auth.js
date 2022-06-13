@@ -1,17 +1,17 @@
 import jwt from 'jsonwebtoken';
 
 const validateAuth = (permissionName = undefined) => (req, res, next) => {
-  const bypass_acl = process.env.BYPASS_ACL || 0;
+  const bypassAcl = process.env.BYPASS_ACL || 0;
 
-  if (bypass_acl) {
+  if (bypassAcl) {
     return next();
   }
 
-  let access_token = req.body.access_token || req.query.access_token || req.headers['x-access-token'];
+  let accessToken = req.body.access_token || req.query.access_token || req.headers['x-access-token'];
 
-  if (!access_token) {
+  if (!accessToken) {
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-      access_token = req.headers.authorization.split(' ')[1];
+      [, accessToken] = [...req.headers.authorization.split(' ')];
     } else {
       return res.status(401).send('An Access Token is required for authentication');
     }
@@ -19,16 +19,13 @@ const validateAuth = (permissionName = undefined) => (req, res, next) => {
 
   let decoded;
   try {
-    decoded = jwt.verify(access_token, process.env.TOKEN_KEY);
+    decoded = jwt.verify(accessToken, process.env.TOKEN_KEY);
     req.user = decoded;
   } catch (err) {
     return res.status(401).send('Invalid Token');
   }
-  console.log(access_token);
 
-  console.log(decoded);
-
-  if (permissionName != undefined) {
+  if (permissionName !== undefined) {
     if (!decoded.permissions.includes(permissionName)) {
       return res.status(403).send('Forbidden! You are not authorized to access this resource.');
     }
@@ -37,6 +34,4 @@ const validateAuth = (permissionName = undefined) => (req, res, next) => {
   return next();
 };
 
-module.exports = {
-  validateAuth,
-};
+export default validateAuth;

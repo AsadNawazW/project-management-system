@@ -2,9 +2,13 @@ import supertest from 'supertest';
 import { faker } from '@faker-js/faker';
 import http from 'http';
 import {
-  initDb, closeConnection, dropDatabase, dropCollection, clearDatabase,
+  initDb,
+  closeConnection,
+  dropDatabase,
+  dropCollection,
+  clearDatabase,
 } from '../database/init';
-import { initAcl } from '../acl/init';
+import initAcl from '../acl/init';
 import { boot, registerRoutes } from '../app';
 
 import RoleService from '../services/RoleService';
@@ -107,7 +111,9 @@ describe('Roles ', () => {
     roleObj.roleObj = faker.name.firstName();
 
     // Act
-    const response = await request.patch(`/api/roles/${roleModel._id}`).send(roleObj);
+    const response = await request
+      .patch(`/api/roles/${roleModel._id}`)
+      .send(roleObj);
 
     // Assert    ;
 
@@ -130,7 +136,9 @@ describe('Roles ', () => {
     // Assert
     expect(response.statusCode).toBe(204);
 
-    const newRoleModel = await RoleServiceObj.Role.findOne({ name: roleObj.name });
+    const newRoleModel = await RoleServiceObj.Role.findOne({
+      name: roleObj.name,
+    });
     expect(newRoleModel).toBeNull();
   });
 
@@ -143,13 +151,13 @@ describe('Roles ', () => {
     const roleModel = await RoleServiceObj.Role.create(roleObj);
 
     const permissionObj = {
-      permissions: [
-        'users.index',
-      ],
+      permissions: ['users.index'],
     };
 
     // Act
-    const response = await request.post(`/api/roles/${roleModel._id}/permissions`).send(permissionObj);
+    const response = await request
+      .post(`/api/roles/${roleModel._id}/permissions`)
+      .send(permissionObj);
 
     // Assert
     const permissions = await RoleServiceObj.getRolePermissionsArray(roleModel);
@@ -157,7 +165,9 @@ describe('Roles ', () => {
     expect(response.header['content-type']).toMatch(/json/);
     expect(response.body.hasOwnProperty('permissions')).toBeTruthy();
     expect(response.body.permissions).toEqual(permissionObj.permissions);
-    expect(permissions).toEqual(expect.arrayContaining(permissionObj.permissions));
+    expect(permissions).toEqual(
+      expect.arrayContaining(permissionObj.permissions),
+    );
   });
 
   test('Detach a permission to  role', async () => {
@@ -167,7 +177,9 @@ describe('Roles ', () => {
       name: 'users.index',
     };
 
-    const permissionModel = await PermissionServiceObj.Permission.create(permissionObj);
+    const permissionModel = await PermissionServiceObj.Permission.create(
+      permissionObj,
+    );
 
     const roleObj = {
       name: faker.name.firstName(),
@@ -176,19 +188,23 @@ describe('Roles ', () => {
     const roleModel = await RoleServiceObj.Role.create(roleObj);
 
     const permissionObjArray = {
-      permissions: [
-        permissionObj.name,
-      ],
+      permissions: [permissionObj.name],
     };
 
-    const addPermissionResponse = await request.post(`/api/roles/${roleModel._id}/permissions`).send(permissionObjArray);
+    const addPermissionResponse = await request
+      .post(`/api/roles/${roleModel._id}/permissions`)
+      .send(permissionObjArray);
 
     // Act
-    const response = await request.delete(`/api/roles/${roleModel._id}/permissions`).send(permissionObjArray);
+    const response = await request
+      .delete(`/api/roles/${roleModel._id}/permissions`)
+      .send(permissionObjArray);
 
     // Assert
     const permissions = await RoleServiceObj.getRolePermissionsArray(roleModel);
     expect(response.statusCode).toBe(204);
-    expect(permissions).toEqual(expect.not.arrayContaining(permissionObjArray.permissions));
+    expect(permissions).toEqual(
+      expect.not.arrayContaining(permissionObjArray.permissions),
+    );
   });
 });

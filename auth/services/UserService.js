@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 const UserService = class {
   constructor() {
@@ -11,8 +10,8 @@ const UserService = class {
       page: 1,
       limit: 10,
       select: [
-        'first_name',
-        'last_name',
+        'firstName',
+        'lastName',
         'email',
       ],
     };
@@ -60,8 +59,8 @@ const UserService = class {
     }
 
     res.status(200).json({
-      first_name: oldUser.first_name,
-      last_name: oldUser.last_name,
+      firstName: oldUser.firstName,
+      lastName: oldUser.lastName,
       email: oldUser.email,
       role: await this.getUserRole(oldUser),
       permissions: await this.getUserPermissions(oldUser),
@@ -75,7 +74,7 @@ const UserService = class {
 
   async createUser(req, res) {
     const {
-      first_name, last_name, email, password,
+      firstName, lastName, email, password,
     } = req.body;
 
     const oldUser = await this.User.findOne({ email });
@@ -88,12 +87,12 @@ const UserService = class {
     const role = await this.getDefaultUserRole();
 
     const user = await this.User.create({
-      first_name, last_name, email, password, role,
+      firstName, lastName, email, password, role,
     });
 
     res.status(201).json({
-      first_name,
-      last_name,
+      firstName,
+      lastName,
       email: user.email,
       role: await this.getUserRole(user),
       permissions: await this.getUserPermissions(user),
@@ -101,8 +100,6 @@ const UserService = class {
   }
 
   async updateUser(req, res) {
-    const { email } = req.body;
-
     const oldUser = await this.User.findById(req.params.userId);
 
     if (!oldUser) {
@@ -110,12 +107,12 @@ const UserService = class {
       return;
     }
 
-    if (req.body.first_name) {
-      oldUser.first_name = req.body.first_name;
+    if (req.body.firstName) {
+      oldUser.firstName = req.body.firstName;
     }
 
-    if (req.body.last_name) {
-      oldUser.last_name = req.body.last_name;
+    if (req.body.lastName) {
+      oldUser.lastName = req.body.lastName;
     }
 
     if (req.body.password) {
@@ -126,8 +123,8 @@ const UserService = class {
     oldUser.save();
 
     res.status(200).json({
-      first_name: oldUser.first_name,
-      last_name: oldUser.last_name,
+      firstName: oldUser.firstName,
+      lastName: oldUser.lastName,
       email: oldUser.email,
       role: await this.getUserRole(oldUser),
       permissions: await this.getUserPermissions(oldUser),
@@ -170,8 +167,8 @@ const UserService = class {
     oldUser.save();
 
     res.status(200).json({
-      first_name: oldUser.first_name,
-      last_name: oldUser.last_name,
+      firstName: oldUser.firstName,
+      lastName: oldUser.lastName,
       email: oldUser.email,
       role: await this.getUserRole(oldUser),
       permissions: await this.getUserPermissions(oldUser),

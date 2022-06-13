@@ -32,8 +32,7 @@ export async function initDb() {
 }
 
 export async function closeConnection() {
-  console.log('DB Closed!');
-  const disconnect = await mongoose.connection.close();
+  await mongoose.connection.close();
   // let disconnect = mongoose.disconnect();
 }
 
