@@ -6,9 +6,13 @@ import { boot, registerRoutes } from './app';
 import initListeners from './listeners/init';
 import initRedis from './redis/init';
 
-config();
+if (process.env.LOCAL_MODE) {
+  config({ path: '.env.local', debug: true });
+} else {
+  config();
+}
 
-if (cluster.isPrimary) {
+if (cluster.isPrimary && !process.env.NO_CLUSTERING) {
   const threads = process.CLUSTER_THREADS || 4;
 
   for (let i = 0; i < threads; i += 1) {
