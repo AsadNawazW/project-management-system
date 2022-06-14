@@ -1,7 +1,7 @@
 import { initDb } from './database/init';
 import initAcl from './acl/init';
 import { boot, registerRoutes } from './app';
-import AuthListener from './listeners/AuthListener';
+import initListeners from './listeners/init';
 
 require('dotenv').config({ path: '.env.local', debug: true });
 
@@ -9,8 +9,7 @@ require('dotenv').config({ path: '.env.local', debug: true });
 initDb();
 // Load ACL
 initAcl();
+// Init Listeners
+initListeners();
 // Load App
 boot(registerRoutes());
-
-
-let authListener = new AuthListener();

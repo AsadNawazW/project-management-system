@@ -15,8 +15,6 @@ class BaseListener {
       kafkaTopic = this.topic;
     }
 
-    console.log(kafkaTopic);
-
     this.consumer = this.kafka.consumer({
       groupId: `${kafkaTopic}_group`,
     });
@@ -24,12 +22,12 @@ class BaseListener {
     await this.consumer.connect();
 
     await this.consumer.subscribe({
-      topic: kafkaTopic,
-      fromBeginning: false,
+      topics: [kafkaTopic],
+      fromBeginning: true,
     });
 
     await this.consumer.run({
-      eachMessage: async ({ topicName, partition, message }) => {
+      eachMessage: async ({ topic: topicName, partition, message }) => {
         const messageKey = message.key.toString();
         const messageValue = JSON.parse(message.value.toString());
 
@@ -39,7 +37,7 @@ class BaseListener {
           key: messageKey,
           value: messageValue,
         });
-        
+
         if (typeof this[messageKey] === 'function') {
           this[messageKey](messageValue.data, topic);
         }

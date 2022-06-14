@@ -1,8 +1,9 @@
 import PermissionEvents from '../events/PermissionEvents';
+import PermissionModel from '../models/Permission';
 
 const PermissionService = class {
   constructor() {
-    this.Permission = require('../models/Permission');
+    this.Permission = PermissionModel;
     this.paginateOptions = {
       page: 1,
       limit: 10,

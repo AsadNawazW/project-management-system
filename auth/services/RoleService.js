@@ -1,10 +1,13 @@
 import RoleEvents from '../events/RoleEvents';
+import PermissionModel from '../models/Permission';
+import RoleModel from '../models/Role';
+import RolePermissionModel from '../models/RolePermission';
 
 const RoleService = class {
   constructor() {
-    this.Role = require('../models/Role');
-    this.Permission = require('../models/Permission');
-    this.RolePermission = require('../models/RolePermission');
+    this.Role = RoleModel;
+    this.Permission = PermissionModel;
+    this.RolePermission = RolePermissionModel;
     this.paginateOptions = {
       page: 1,
       limit: 10,

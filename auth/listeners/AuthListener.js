@@ -6,35 +6,11 @@ class AuthListener extends BaseListener {
   }
 
   async userRegistered(userModel) {
-
+    console.log(`${userModel.email} Registered. This message is comming from the listeners`);
   }
 
   async userLoggedIn(userModel) {
     console.log(`${userModel.email} Logged In. This message is comming from the listeners`);
-  }
-
-  async userLoggedOut(userModel) {
-
-  }
-
-  async userCreated(userModel) {
-
-  }
-
-  async userUpdated(userModel) {
-
-  }
-
-  async userDeleted(userModel) {
-
-  }
-
-  async userPasswordChanged(userModel) {
-
-  }
-
-  async userRoleChanged(userModel) {
-
   }
 }
 
