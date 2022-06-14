@@ -50,18 +50,18 @@ export function registerRoutes() {
   app.use(bodyParser.json());
 
   // Load API Routes
-  const router = express.Router()
+  const router = express.Router();
   const apiAuthRoutes = AuthRoutes(router, {});
-  app.use('/api/auth', apiAuthRoutes)
+  app.use('/api/auth', apiAuthRoutes);
 
   const apiUserRoutes = UsersRoutes(router, {});
-  app.use('/api', apiUserRoutes)
+  app.use('/api', apiUserRoutes);
 
   const apiRoleRoutes = RolesRoutes(router, {});
-  app.use('/api', apiRoleRoutes)
+  app.use('/api', apiRoleRoutes);
 
   const apiPermissionRoutes = PermissionsRoutes(router, {});
-  app.use('/api', apiPermissionRoutes)
+  app.use('/api', apiPermissionRoutes);
 
   app.use('/api-docs', (req, res, next) => {
     swaggerDocument.host = `${req.get('host')}/api`;
@@ -72,7 +72,7 @@ export function registerRoutes() {
   // const apiPermissionRoutes = PermissionsRoutes(router, {});
   // app.use('/api/permission', apiPermissionRoutes)
 
-  app.get('*', (req, res) => { 
+  app.get('*', (req, res) => {
     res.status(404).send('not found');
   });
   app.post('*', (req, res) => {

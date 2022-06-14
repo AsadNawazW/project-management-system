@@ -1,11 +1,13 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import RoleEvents from '../events/RoleEvents';
+import PermissionModel from '../models/Permission';
+import RoleModel from '../models/Role';
+import RolePermissionModel from '../models/RolePermission';
 
 const RoleService = class {
   constructor() {
-    this.Role = require('../models/Role');
-    this.Permission = require('../models/Permission');
-    this.RolePermission = require('../models/RolePermission');
+    this.Role = RoleModel;
+    this.Permission = PermissionModel;
+    this.RolePermission = RolePermissionModel;
     this.paginateOptions = {
       page: 1,
       limit: 10,
@@ -77,6 +79,8 @@ const RoleService = class {
       name,
     });
 
+    this.emitEvents('roleCreated', role);
+
     res.status(201).json({
       name,
       permissions: await this.getRolePermissionsArray(oldRole),
@@ -96,6 +100,8 @@ const RoleService = class {
     oldRole.name = name;
     oldRole.save();
 
+    this.emitEvents('roleUpdated', oldRole);
+
     res.status(200).json({
       name: oldRole.name,
       permissions: await this.getRolePermissionsArray(oldRole),
@@ -111,6 +117,8 @@ const RoleService = class {
     }
 
     oldRole.delete();
+    this.emitEvents('roleDeleted', oldRole);
+
     res.status(204).send();
   }
 
@@ -118,7 +126,6 @@ const RoleService = class {
     let permission;
     let rolePermission;
 
-    const { name } = req.params;
     const { permissions } = req.body;
 
     const role = await this.Role.findById(req.params.roleId);
@@ -145,6 +152,11 @@ const RoleService = class {
 
       if (!rolePermission) {
         rolePermission = await this.RolePermission.create({
+          role,
+          permission,
+        });
+
+        this.emitEvents('rolePermissionAttached', {
           role,
           permission,
         });
@@ -187,10 +199,23 @@ const RoleService = class {
 
       if (rolePermission) {
         rolePermission.delete();
+        this.emitEvents('rolePermissionDetached', {
+          rolePermission,
+          role,
+          permission,
+        });
       }
     }
 
     res.status(204).send();
+  }
+
+  emitEvents(key, value, topic = undefined) {
+    if (this.eventEmitter === undefined) {
+      this.eventEmitter = new RoleEvents();
+    }
+
+    this.eventEmitter[key](value, topic);
   }
 };
 

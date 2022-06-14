@@ -1,16 +1,15 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import PermissionEvents from '../events/PermissionEvents';
+import PermissionModel from '../models/Permission';
 
 const PermissionService = class {
   constructor() {
-    this.Permission = require('../models/Permission');
+    this.Permission = PermissionModel;
     this.paginateOptions = {
       page: 1,
       limit: 10,
       select: ['name'],
     };
   }
-
 
   async getPermission(req, res) {
     const oldPermission = await this.Permission.findById(
@@ -49,6 +48,8 @@ const PermissionService = class {
       name,
     });
 
+    this.emitEvents('permissionCreated', permission);
+
     res.status(201).json({
       name,
     });
@@ -69,6 +70,8 @@ const PermissionService = class {
     oldPermission.name = name;
     oldPermission.save();
 
+    this.emitEvents('permissionUpdated', oldPermission);
+
     res.status(200).json({
       name,
     });
@@ -85,9 +88,20 @@ const PermissionService = class {
     }
 
     oldPermission.delete();
+
+    this.emitEvents('permissionDeleted', oldPermission);
+
     res.status(204).json({
       status: 'success',
     });
+  }
+
+  emitEvents(key, value, topic = undefined) {
+    if (this.eventEmitter === undefined) {
+      this.eventEmitter = new PermissionEvents();
+    }
+
+    this.eventEmitter[key](value, topic);
   }
 };
 

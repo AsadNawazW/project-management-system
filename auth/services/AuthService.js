@@ -96,7 +96,6 @@ class AuthService extends BaseService {
       // save user token
       user.token = token;
 
-
       this.emitEvents('userRegistered', {
         email: user.email,
         role,

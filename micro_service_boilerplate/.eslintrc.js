@@ -18,5 +18,6 @@ module.exports = {
     'no-return-await': 0,
     'no-underscore-dangle': 0,
     'import/no-import-module-exports': 0,
+    'class-methods-use-this': 0,
   },
 };

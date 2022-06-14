@@ -14,7 +14,7 @@ export function boot(app) {
   const server = app.listen(port, host);
 
   server.on('listening', () => {
-    console.log(`Example app listening on port http:\/\/${server.address().address}:${port}`)
+    console.log(`Example app listening on port http:\/\/${server.address().address}:${port}`);
   });
 
   // Load Security Headers
@@ -57,7 +57,7 @@ export function registerRoutes() {
     next();
   }, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-  app.get('*', (req, res) => { 
+  app.get('*', (req, res) => {
     res.status(404).send('not found');
   });
   app.post('*', (req, res) => {

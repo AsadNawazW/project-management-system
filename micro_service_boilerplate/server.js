@@ -2,6 +2,7 @@ import cluster from 'cluster';
 import { config } from 'dotenv';
 import { initDb } from './database/init';
 import { boot, registerRoutes } from './app';
+import initListeners from './listeners/init';
 
 config();
 
@@ -14,6 +15,8 @@ if (cluster.isPrimary) {
 } else {
   // Load database
   initDb();
+  // Load Listeners
+  initListeners();
   // Load App
   boot(registerRoutes());
 }
