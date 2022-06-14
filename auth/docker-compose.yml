@@ -1,5 +1,10 @@
 version: '3.8'
 services:
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379
   mongo:
     image: mongo
     restart: always
@@ -17,15 +22,18 @@ services:
       - 11000:10000
     links:
       - mongo
+      - redis
     environment:
+      SERVER_HOST: "web-auth-service"
+      SERVER_PORT: "${SERVER_PORT-10000}"
+      TOKEN_KEY: "${TOKEN_KEY-someVeryRandomAndSecureValue!@?}"
       MONGODB_HOST: "${MONGODB_HOST-mongo}"
       MONGODB_PORT: ${MONGODB_PORT-27017}
       MONGODB_DATABASE: "${MONGODB_DATABASE}"
       MONGODB_USERNAME: "${MONGODB_USERNAME-root}"
-      MONGODB_PASSWORD: "${MONGODB_PASSWORD-example}"
-      SERVER_HOST: "web-auth-service"
-      SERVER_PORT: "${SERVER_PORT-10000}"
-      TOKEN_KEY: "${TOKEN_KEY-someVeryRandomAndSecureValue!@?}"
+      MONGODB_PASSWORD: "${MONGODB_PASSWORD-example}"      
+      REDIS_HOST: "${REDIST_HOST-redis}"
+      REDIS_PORT: "${REDIST_PORT-6379}"            
       KAFKA_CLIENT_ID: "${KAFKA_CLIENT_ID-project_management_system_kafka}"
       KAFKA_DEFAULT_TOPIC: "${KAFKA_DEFAULT_TOPIC-project_management_system_kafka_default_topic}"
 
